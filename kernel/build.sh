@@ -48,6 +48,11 @@ cd "linux-$VERSION"
 cp "$HERE/config/ubuntu-26.04.config" .config
 ./scripts/kconfig/merge_config.sh -m .config "$HERE/config/ochna.fragment" >/dev/null
 make olddefconfig >/dev/null
+# OCHNA-K10: linux-headers ships objtool and sign-file linked to libelf, libcrypto, zlib; declare them
+anchor='Build-Profiles: <!pkg.${sourcename}.nokernelheaders>'
+[ "$(grep -cxF "$anchor" scripts/package/mkdebian)" = 1 ] || die "mkdebian headers anchor not found"
+sed -i "/^Build-Profiles: <!pkg.\${sourcename}.nokernelheaders>\$/a Depends: libc6, libelf1t64, libssl3t64, zlib1g, libgcc-s1" scripts/package/mkdebian
+grep -qxF 'Depends: libc6, libelf1t64, libssl3t64, zlib1g, libgcc-s1' scripts/package/mkdebian || die "headers Depends not added"
 # OCHNA-K1: fail early if the fragment did not survive olddefconfig
 for k in 'CONFIG_LOCALVERSION="-ochna"' 'CONFIG_RUST=y' 'CONFIG_DEBUG_INFO_BTF=y' 'CONFIG_DEBUG_INFO_BTF_MODULES=y' 'CONFIG_DEBUG_INFO_COMPRESSED_ZSTD=y'; do
     grep -qxF "$k" .config || die "fragment not applied: $k"

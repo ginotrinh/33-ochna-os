@@ -111,3 +111,8 @@ Tra bằng `gh search repos` (`bindeb-pkg`, `kernel build actions deb`, `custom 
 
 - Runner `ubuntu-24.04`: `/` 145 GB, trống 85 GB, sau dọn đĩa 110 GB; build dùng đỉnh 60234 MiB trên `/` (từ khoảng 35 GB, tức khoảng 24 GB cho build). Con số 14 GB trong tài liệu GitHub không phải dung lượng trống thật. Build 1:35:37 (máy anh 1:46:13).
 - Job `nvidia` hỏng: `dkms build` exit 2, log CI không in `make.log`. Cùng gói `nvidia-dkms-580` 580.178.04 build đạt trong máy ảo chạy kernel `-ochna` (rc 0), nên lỗi nằm ở môi trường container, chưa biết thiếu gì. Sửa: in 80 dòng cuối `make.log` khi hỏng, chạy lại.
+
+## 2026-11-28 · OCHNA-K10 · `kernel/build.sh`
+
+- Run `46069444033`: build 2:00:04, `nvidia` hỏng vì `objtool` trong gói headers báo `libelf.so.1: cannot open shared object file`. Gói `linux-headers` do `bindeb-pkg` sinh không khai `Depends` (`scripts/package/mkdebian` 6.18.65), mà `objtool`, `sign-file` và vài công cụ khác liên kết động tới `libelf.so.1`, `libcrypto.so.3`, `libz.so.1`, `libgcc_s.so.1`, `libc.so.6` (đọc bằng `readelf -d`). Máy ảo cloud image có sẵn các thư viện đó nên build đạt; container tối giản và nền `debootstrap` tối giản thì không.
+- Sửa: `build.sh` thêm `Depends: libc6, libelf1t64, libssl3t64, zlib1g, libgcc-s1` vào gói headers trước khi build (sửa `mkdebian` trong cây mã đã giải nén, có kiểm chỗ neo). Phương án bị loại: cài `libelf1t64` riêng trong bước test CI (che lỗi, nền tối giản vẫn dính).
