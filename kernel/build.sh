@@ -48,7 +48,11 @@ cd "linux-$VERSION"
 cp "$HERE/config/ubuntu-26.04.config" .config
 ./scripts/kconfig/merge_config.sh -m .config "$HERE/config/ochna.fragment" >/dev/null
 make olddefconfig >/dev/null
-grep -q '^CONFIG_LOCALVERSION="-ochna"$' .config || die "fragment not applied"
+# OCHNA-K1: fail early if the fragment did not survive olddefconfig
+for k in 'CONFIG_LOCALVERSION="-ochna"' 'CONFIG_DEBUG_INFO_NONE=y'; do
+    grep -qxF "$k" .config || die "fragment not applied: $k"
+done
+grep -qx 'CONFIG_DEBUG_INFO_BTF=y' .config && die "fragment not applied: BTF still on"
 
 # OCHNA-K1: build packages
 make -j"$(nproc)" bindeb-pkg KDEB_PKGVERSION="$VERSION-1ochna" >/dev/null

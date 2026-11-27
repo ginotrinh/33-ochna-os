@@ -58,7 +58,9 @@ jobs:
           sed -i "s/^checked=.*/checked=$(date -u +%F)/" kernel/status
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git diff --quiet && exit 0
           git commit -am "OCHNA-K2 (INFO): kernel check $(date -u +%F), no new release"
+          git pull --rebase -q origin "${GITHUB_REF_NAME}"
           git push
 
   build:
@@ -81,7 +83,7 @@ jobs:
             apt-get update -qq
             apt-get install -y -qq --no-install-recommends \
               build-essential bc bison flex cpio rsync kmod curl ca-certificates xz-utils python3 \
-              libssl-dev libelf-dev dwarves dpkg-dev debhelper fakeroot zstd >/dev/null
+              libssl-dev libelf-dev libdw-dev gawk dwarves dpkg-dev debhelper fakeroot zstd >/dev/null
             kernel/build.sh "${{ needs.check.outputs.version }}"
             chown -R '"$(id -u):$(id -g)"' out
           '
@@ -137,4 +139,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -am "OCHNA-K2 (INFO): kernel $VERSION released"
+          git pull --rebase -q origin "${GITHUB_REF_NAME}"
           git push
