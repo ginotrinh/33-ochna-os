@@ -28,16 +28,16 @@ Hướng C gồm bốn lớp:
 - [ ] 1. Một lệnh (`kernel/build.sh` hoặc tương đương) build ra gói `linux-image` và `linux-headers` của OchnaOS từ một bản kernel ghi rõ trong repo, chạy được cả ở máy anh lẫn trên CI.
 - [ ] 2. Cài gói đó vào một máy ảo Ubuntu 26.04: máy khởi động được, `uname -r` ra bản OchnaOS, mạng và ổ đĩa hoạt động.
 - [ ] 3. Driver NVIDIA nhánh 580 build được với kernel đó (trên CI, bằng DKMS hoặc cách tương đương); build hỏng thì bản kernel đó không được phát hành.
-- [ ] 4. Workflow chạy theo lịch mỗi tuần và chạy tay được; mỗi lần chạy xong dưới 6 giờ (giới hạn một job của GitHub), log ghi rõ bản kernel và kết quả.
-- [ ] 5. Gói đạt yêu cầu được phát hành ở một chỗ cố định, có tên và phiên bản nhận ra được, kèm checksum.
+- [ ] 4. Workflow chạy theo lịch mỗi tuần và chạy tay được; mỗi lần chạy xong dưới 6 giờ (giới hạn một job của GitHub), log ghi rõ bản kernel và kết quả. Tuần không có bản vá mới thì không build, nhưng vẫn cập nhật một file trạng thái trong repo (bản kernel đã kiểm, ngày kiểm).
+- [ ] 5. Gói đạt yêu cầu được phát hành lên GitHub Releases của repo, tên release có bản kernel, kèm file checksum.
 - [ ] 6. Repo công khai không chứa file có bản quyền riêng, bí mật, hay file build ra (`git ls-files` đối chiếu `.gitignore` và luật trong `CLAUDE.md`).
 
 **Ngoài phạm vi giai đoạn 1:** nền userspace, desktop, ISO, cài lên P50, ký Secure Boot cho kernel (ghi lại để quyết ở giai đoạn sau).
 
-**Câu hỏi cần anh chốt trước khi duyệt:**
-1. Nguồn kernel: theo nhánh LTS của kernel.org (thuần, tự cấu hình), hay theo mã kernel của Ubuntu 26.04 (đã có bản vá của Ubuntu, sát với nền giai đoạn 2). Em nghiêng kernel.org LTS cộng cấu hình khởi đầu lấy từ Ubuntu, vì đó đúng là "tự build kernel", và cấu hình Ubuntu giúp phần cứng chạy ngay.
-2. Chỗ phát hành gói: GitHub Releases của repo này (đơn giản, giai đoạn 1 đủ dùng), hay dựng kho `apt` ngay (P50 cập nhật bằng `apt`, nhưng thêm việc ký kho bằng GPG). Em nghiêng GitHub Releases cho giai đoạn 1, kho `apt` để giai đoạn 4.
-3. Tuần nào không có bản vá kernel mới thì CI làm gì: bỏ qua build (đỡ thời gian), hay vẫn build lại (bắt sớm lỗi khi công cụ build đổi). Lưu ý: repo công khai không có hoạt động 60 ngày thì GitHub tự tắt lịch chạy, nên tuần bỏ qua vẫn cần ghi một dấu vết (vd cập nhật file trạng thái).
+**Đã chốt (anh, 2026-11-27):**
+1. Nguồn kernel: nhánh LTS của kernel.org, cấu hình khởi đầu lấy từ kernel của Ubuntu 26.04 rồi chỉnh cho P50.
+2. Chỗ phát hành gói: GitHub Releases của repo này ở giai đoạn 1; kho `apt` có ký để giai đoạn 4.
+3. Tuần không có bản vá kernel mới: CI bỏ qua build nhưng ghi một dấu vết (file trạng thái trong repo) để repo công khai không bị GitHub tắt lịch chạy sau 60 ngày không hoạt động.
 
 ## Đã tra trước khi thiết kế (luật 29 của gaos)
 
@@ -61,3 +61,4 @@ Kết quả: chưa thấy dự án lớn nào build kernel mỗi tuần hoàn to
 ## Thay đổi SPEC (changelog)
 
 - 2026-11-27: tạo SPEC, giai đoạn 1 chờ duyệt.
+- 2026-11-27: anh chốt 3 câu hỏi (kernel.org LTS với cấu hình khởi đầu của Ubuntu; GitHub Releases ở giai đoạn 1; tuần không có bản vá thì bỏ build nhưng ghi dấu vết); tiêu chí 4 và 5 viết rõ theo đó. Giai đoạn 1 vẫn chờ anh duyệt.
