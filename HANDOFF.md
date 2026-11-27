@@ -2,8 +2,9 @@
 
 ## NEXT ACTION
 
-1. ⏳ **Build thử kernel ở máy anh** — cài gói build (`bison flex libssl-dev libelf-dev`), chạy `kernel/build.sh`, rồi thử boot trong máy ảo Ubuntu 26.04 (tiêu chí 1, 2).
-2. ⏳ **Push rồi chạy workflow `kernel` bằng tay một lần** — chỉ push khi bước 1 boot được và chạy ổn trong VM; đo thời gian, đĩa, kết quả NVIDIA (tiêu chí 3 tới 5).
+1. ✅ **XONG 2026-11-27 (Lucina):** build không BTF 1:25:35, `kernel/vm-test.sh` 4 PASS (`c6a928a`) ~~**Build thử kernel ở máy anh, boot trong máy ảo Ubuntu 26.04**~~
+2. ⏳ **Đo build có BTF rồi anh chốt giữ BTF** — `build/build-btf.log` (thời gian, `peak build/ KiB`); chạy lại `kernel/vm-test.sh`, kiểm hết lỗi `bpf-restrict-fs`; so với lần không BTF (6.7 GB, 1:25:35).
+3. ⏳ **Push rồi chạy workflow `kernel` bằng tay một lần** — chỉ push khi bước 2 đã chốt và VM chạy ổn và chạy ổn trong VM; đo thời gian, đĩa, kết quả NVIDIA (tiêu chí 3 tới 5).
 
 ## Tồn đọng (backlog)
 
