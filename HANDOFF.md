@@ -3,8 +3,8 @@
 ## NEXT ACTION
 
 1. ✅ **XONG 2026-11-27 (Lucina):** build không BTF 1:25:35, `kernel/vm-test.sh` 4 PASS (`c6a928a`) ~~**Build thử kernel ở máy anh, boot trong máy ảo Ubuntu 26.04**~~
-2. ⏳ **Đo build có BTF rồi anh chốt giữ BTF** — `build/build-btf.log` (thời gian, `peak build/ KiB`); chạy lại `kernel/vm-test.sh`, kiểm hết lỗi `bpf-restrict-fs`; so với lần không BTF (6.7 GB, 1:25:35).
-3. ⏳ **Push rồi chạy workflow `kernel` bằng tay một lần** — chỉ push khi bước 2 đã chốt và VM chạy ổn và chạy ổn trong VM; đo thời gian, đĩa, kết quả NVIDIA (tiêu chí 3 tới 5).
+2. ✅ **XONG 2026-11-28 (Lucina):** anh chọn giữ BTF và nén zstd; build 1:46:13, đỉnh 23.0 GiB, VM test 4 PASS, hết `bpf-restrict-fs` (`b52c8ed`) ~~**Đo build có BTF rồi anh chốt giữ BTF**~~
+3. ⏳ **Đọc kết quả lần chạy tay đầu tiên của workflow `kernel`** — đã push `0f54a15`, run `46056804098`; lịch tuần đang tắt; đọc đỉnh đĩa (`peak root used MiB`), thời gian, NVIDIA, Release; đạt thì bật lại `schedule` (tiêu chí 1, 3 tới 5); hỏng vì đĩa thì cân nhắc `localmodconfig` hoặc bỏ BTF trên CI.
 
 ## Tồn đọng (backlog)
 
