@@ -18,3 +18,4 @@
 7. CI chỉ build; P50 cài khi anh chạy lệnh cập nhật.
 8. Lệnh `sudo` dài: ghi log bằng `script -q -e -c "<lệnh>" <log>`, không dùng `| tee`.
 9. `HANDOFF.md` theo khuôn HANDOFF của gaos.
+10. Comment trong mã: ticket ID và mô tả ngắn, tiếng Anh. BUG, FIX, WHY ghi vào `logs/notes.<YYYY.MM>.md` kèm ticket ID.

@@ -34,3 +34,7 @@ Tra bằng `gh search repos` (`bindeb-pkg`, `kernel build actions deb`, `custom 
 
 - Anh đặt luật: file trong repo chỉ chứa nội dung hiện hành, câu ngắn, không diễn giải, không lý do; diễn giải và lý do ghi vào `logs/`. Đã rút gọn `CLAUDE.md`, `docs/SPEC.md`, `HANDOFF.md`, `.gitignore`, `kernel/README.md`; phần diễn giải chuyển vào file này.
 - License: repo công khai chưa có license nên người khác chỉ xem được; chọn khi biết repo chứa gì (kernel GPL-2.0; WhiteSur, apple_cursor GPL-3.0 nếu mang sang).
+
+## 2026-11-27 · comment trong mã · `CLAUDE.md` luật 10
+
+- Luật 1 (không nêu lý do) đụng khuôn comment 4 dòng ticket, BUG, FIX, WHY trong luật chung của anh. Anh chọn: comment trong mã chỉ giữ ticket ID và mô tả ngắn; BUG, FIX, WHY ghi ở file này kèm ticket ID, để tra ngược từ mã sang lý do.
