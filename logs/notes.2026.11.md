@@ -106,3 +106,8 @@ Tra bằng `gh search repos` (`bindeb-pkg`, `kernel build actions deb`, `custom 
 ## 2026-11-28 · OCHNA-K8 · `.github/workflows/kernel.yml`
 
 - Anh chọn: push, tạm tắt lịch tuần, chạy tay một lần để đo đĩa thật của runner (bản build BTF + zstd cần 23 GiB ở máy anh, tài liệu GitHub ghi 14 GB). Job build in `df` trước, sau dọn đĩa, và đỉnh dùng đĩa lấy mẫu mỗi 60 giây, kể cả khi build hỏng. Lần chạy tay vẫn đăng Release nếu build và NVIDIA đạt.
+
+## 2026-11-28 · OCHNA-K9 · lần chạy CI đầu `46056804098`
+
+- Runner `ubuntu-24.04`: `/` 145 GB, trống 85 GB, sau dọn đĩa 110 GB; build dùng đỉnh 60234 MiB trên `/` (từ khoảng 35 GB, tức khoảng 24 GB cho build). Con số 14 GB trong tài liệu GitHub không phải dung lượng trống thật. Build 1:35:37 (máy anh 1:46:13).
+- Job `nvidia` hỏng: `dkms build` exit 2, log CI không in `make.log`. Cùng gói `nvidia-dkms-580` 580.178.04 build đạt trong máy ảo chạy kernel `-ochna` (rc 0), nên lỗi nằm ở môi trường container, chưa biết thiếu gì. Sửa: in 80 dòng cuối `make.log` khi hỏng, chạy lại.

@@ -122,7 +122,8 @@ jobs:
             apt-get install -y -qq --no-install-recommends nvidia-dkms-580 >/dev/null || true
             ver="$(ls /usr/src | sed -n "s/^nvidia-//p" | head -n1)"
             [ -n "$ver" ] || { echo "nvidia dkms source missing"; exit 1; }
-            dkms build -m nvidia -v "$ver" -k "'"$krel"'"
+            # OCHNA-K9: show the DKMS build log when the build fails
+            dkms build -m nvidia -v "$ver" -k "'"$krel"'" || { tail -n 80 /var/lib/dkms/nvidia/"$ver"/build/make.log; exit 1; }
             ls /var/lib/dkms/nvidia/"$ver"/"'"$krel"'"/x86_64/module/
           '
 
