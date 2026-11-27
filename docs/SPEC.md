@@ -20,7 +20,7 @@ Duyệt: giai đoạn 1, 2026-11-27.
 
 **Done when:**
 - [ ] 1. Một lệnh build ra `linux-image` và `linux-headers` OchnaOS từ bản kernel ghi trong repo, ở máy anh và trên CI.
-- [ ] 2. Máy ảo Ubuntu 26.04 cài gói đó khởi động được; `uname -r` ra bản OchnaOS; mạng và ổ đĩa chạy.
+- [x] 2. Máy ảo Ubuntu 26.04 cài gói đó khởi động được; `uname -r` ra bản OchnaOS; mạng và ổ đĩa chạy. — bằng chứng: `kernel/vm-test.sh` 2026-11-27, 4 PASS (`uname -r` 6.18.65-ochna, https kernel.org, ghi đọc 256 MiB, `CONFIG_RUST=y`), exit 0.
 - [ ] 3. Driver NVIDIA nhánh 580 build được với kernel đó trên CI; build hỏng thì không phát hành.
 - [ ] 4. Workflow chạy mỗi tuần và chạy tay, mỗi lần dưới 6 giờ, log ghi bản kernel và kết quả; tuần không có bản vá mới thì cập nhật file trạng thái (bản kernel đã kiểm, ngày kiểm).
 - [ ] 5. Gói đạt được phát hành lên GitHub Releases, tên release có bản kernel, kèm file checksum.

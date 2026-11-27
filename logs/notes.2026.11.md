@@ -83,3 +83,8 @@ Tra bằng `gh search repos` (`bindeb-pkg`, `kernel build actions deb`, `custom 
 
 - Build lần 2 ở máy anh: 1:25:35 với 8 luồng, RAM tối đa 1.8 GB, thư mục `build/` 6.7 GB; gói image 111 MB, headers 10 MB.
 - Gói ghi maintainer là user và tên máy build (`scripts/package/mkdebian` dòng 137 tới 145), `uname -v` ghi user và host. Đặt tên trung tính để Release công khai không mang tên máy; `.invalid` là tên miền dành riêng, không gửi thư được.
+
+## 2026-11-27 · kết quả `kernel/vm-test.sh` · `docs/SPEC.md` tiêu chí 2
+
+- 4 PASS, 46 module nạp, 8 dòng dmesg mức err: 6 dòng `I/O error, dev fd0` (QEMU giả lập ổ mềm không có đĩa, không liên quan kernel) và 2 dòng `systemd: bpf-restrict-fs: Failed to load BPF object: No such process`.
+- `bpf-restrict-fs` là chương trình BPF LSM của systemd thực thi `RestrictFileSystems=`. Em suy luận (chưa kiểm) lỗi do tắt BTF: libbpf cần `/sys/kernel/btf/vmlinux`, không có thì trả `ESRCH`. Hệ quả: dịch vụ khai `RestrictFileSystems=` chạy không có lớp chặn đó. Tiêu chí 1 mới đạt nửa ở máy anh (`build.sh` exit 0, 1:25:35), còn CI.
