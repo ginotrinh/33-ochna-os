@@ -49,13 +49,14 @@ cp "$HERE/config/ubuntu-26.04.config" .config
 ./scripts/kconfig/merge_config.sh -m .config "$HERE/config/ochna.fragment" >/dev/null
 make olddefconfig >/dev/null
 # OCHNA-K1: fail early if the fragment did not survive olddefconfig
-for k in 'CONFIG_LOCALVERSION="-ochna"' 'CONFIG_DEBUG_INFO_NONE=y' 'CONFIG_RUST=y'; do
+for k in 'CONFIG_LOCALVERSION="-ochna"' 'CONFIG_RUST=y' 'CONFIG_DEBUG_INFO_BTF=y' 'CONFIG_DEBUG_INFO_BTF_MODULES=y'; do
     grep -qxF "$k" .config || die "fragment not applied: $k"
 done
-grep -qx 'CONFIG_DEBUG_INFO_BTF=y' .config && die "fragment not applied: BTF still on"
 
 # OCHNA-K1: build packages
 # OCHNA-K5: neutral build identity in uname -v and package metadata
+# OCHNA-K6: skip the linux-image-*-dbg package
+export DEB_BUILD_PROFILES=pkg.linux-upstream.nokerneldbg
 export KBUILD_BUILD_USER=ochna KBUILD_BUILD_HOST=ochna-os DEBFULLNAME=OchnaOS DEBEMAIL=noreply@ochna.invalid
 make -j"$(nproc)" bindeb-pkg KDEB_PKGVERSION="$VERSION-1ochna" >/dev/null
 cd "$BUILD"
