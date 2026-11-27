@@ -38,3 +38,24 @@ Tra bằng `gh search repos` (`bindeb-pkg`, `kernel build actions deb`, `custom 
 ## 2026-11-27 · comment trong mã · `CLAUDE.md` luật 10
 
 - Luật 1 (không nêu lý do) đụng khuôn comment 4 dòng ticket, BUG, FIX, WHY trong luật chung của anh. Anh chọn: comment trong mã chỉ giữ ticket ID và mô tả ngắn; BUG, FIX, WHY ghi ở file này kèm ticket ID, để tra ngược từ mã sang lý do.
+
+## 2026-11-27 · license · `LICENSE`
+
+- Anh chọn GPL-2.0 cho cả repo. Không license nào chặn được việc xem hay clone repo công khai (điều khoản GitHub cho phép xem và fork); license chỉ quyết người khác được dùng lại thế nào. GPL-2.0 khớp với kernel, phần chiếm nhiều nhất của repo.
+
+## 2026-11-27 · OCHNA-K1 · `kernel/build.sh`, `kernel/config/`
+
+- Nhánh kernel: 6.18 longterm, bản mới nhất là 6.18.65 (kernel.org `releases.json`, đọc 2026-11-27). Ubuntu 26.04 chạy 7.0; 6.18 cũ hơn một nhánh lớn nhưng được vá dài hạn. Muốn theo nhánh mới hơn thì sửa `kernel/series`.
+- Cấu hình khởi đầu: `/boot/config-7.0.0-43-generic` của máy anh. Ghép sang 6.18 bằng `merge_config.sh` rồi `make olddefconfig`: khoá không có trong 6.18 bị bỏ, khoá mới lấy mặc định.
+- `SYSTEM_TRUSTED_KEYS`, `SYSTEM_REVOCATION_KEYS` để rỗng: cấu hình Ubuntu trỏ tới `debian/canonical-certs.pem`, file chỉ có trong mã kernel của Ubuntu, build mã kernel.org sẽ lỗi.
+- Tắt `DEBUG_INFO`, BTF: giảm dung lượng build và gói, vừa ổ 14 GB của runner (ước tính, chưa đo). Hệ quả: công cụ eBPF cần BTF (bpftrace với kiểu dữ liệu kernel) không chạy được.
+- Ký module giữ bật, khoá ký sinh mới mỗi lần build (`certs/signing_key.pem`, không vào git). `MODULE_SIG_FORCE` tắt, nên module DKMS không ký (NVIDIA) vẫn nạp được, kernel đánh dấu tainted.
+- Kiểm tarball bằng `sha256sums.asc` của kernel.org; chưa kiểm chữ ký GPG của file đó.
+
+## 2026-11-27 · OCHNA-K2 · `.github/workflows/kernel.yml`
+
+- Build trong container `ubuntu:26.04` để trình biên dịch khớp với nền Ubuntu 26.04; runner chỉ có `ubuntu-24.04`.
+- Dọn đĩa runner bằng `rm` trực tiếp thay cho action ngoài (ý từ `damentz/liquorix-package`).
+- NVIDIA: P50 dùng Quadro M1000M (Maxwell), driver mở `-open` cần Turing trở lên, nên test `nvidia-dkms-580` bản đóng. Bước cài `|| true` vì postinst gọi DKMS cho kernel của runner và lỗi; `dkms build` ngay sau đó mới là phép thử.
+- Tuần không có bản mới: job `check` ghi ngày vào `kernel/status` rồi commit, để repo có hoạt động (GitHub tắt lịch sau 60 ngày không hoạt động).
+- Chưa chạy thật: thời gian build trên runner 4 CPU, dung lượng đĩa, việc `nvidia-dkms-580` có trong kho mặc định của image `ubuntu:26.04`.

@@ -1,0 +1,140 @@
+# OCHNA-K2: weekly kernel build, NVIDIA DKMS test, GitHub Release
+name: kernel
+
+on:
+  schedule:
+    - cron: "0 2 * * 1"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Kernel version, empty = latest of kernel/series"
+        required: false
+        default: ""
+      force:
+        description: "Build even if kernel/status already has this version"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: kernel
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    outputs:
+      version: ${{ steps.v.outputs.version }}
+      build: ${{ steps.v.outputs.build }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: v
+        env:
+          WANT: ${{ inputs.version }}
+          FORCE: ${{ inputs.force }}
+        run: |
+          series="$(tr -d '[:space:]' < kernel/series)"
+          if [ -n "$WANT" ]; then
+            version="$WANT"
+          else
+            version="$(curl -fsSL https://www.kernel.org/releases.json | python3 -c "
+          import json, sys
+          s = sys.argv[1]
+          v = [r['version'] for r in json.load(sys.stdin)['releases'] if r['version'].startswith(s + '.')]
+          print(v[0] if v else '')" "$series")"
+          fi
+          [ -n "$version" ] || { echo "no release for series $series"; exit 1; }
+          built="$(sed -n 's/^built=//p' kernel/status)"
+          build=false
+          if [ "$version" != "$built" ] || [ "$FORCE" = true ]; then build=true; fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "build=$build" >> "$GITHUB_OUTPUT"
+          echo "series $series, latest $version, built $built, build $build"
+      # OCHNA-K2: no new release, record the check so the schedule stays active
+      - if: steps.v.outputs.build == 'false'
+        run: |
+          sed -i "s/^checked=.*/checked=$(date -u +%F)/" kernel/status
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -am "OCHNA-K2 (INFO): kernel check $(date -u +%F), no new release"
+          git push
+
+  build:
+    needs: check
+    if: needs.check.outputs.build == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 345
+    steps:
+      # OCHNA-K2: free runner disk before the kernel build
+      - run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache /usr/local/share/boost
+          sudo docker image prune -af >/dev/null
+          df -h /
+      - uses: actions/checkout@v4
+      - name: build in ubuntu:26.04
+        run: |
+          docker run --rm -v "$PWD:/w" -w /w ubuntu:26.04 bash -c '
+            set -e
+            export DEBIAN_FRONTEND=noninteractive
+            apt-get update -qq
+            apt-get install -y -qq --no-install-recommends \
+              build-essential bc bison flex cpio rsync kmod curl ca-certificates xz-utils python3 \
+              libssl-dev libelf-dev dwarves dpkg-dev debhelper fakeroot zstd >/dev/null
+            kernel/build.sh "${{ needs.check.outputs.version }}"
+            chown -R '"$(id -u):$(id -g)"' out
+          '
+          df -h /
+      - uses: actions/upload-artifact@v4
+        with:
+          name: kernel-debs
+          path: out/
+          retention-days: 7
+
+  nvidia:
+    needs: [check, build]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: kernel-debs
+          path: out
+      # OCHNA-K2: NVIDIA 580 must build against the new headers, failure blocks release
+      - name: dkms nvidia-580 in ubuntu:26.04
+        run: |
+          krel="${{ needs.check.outputs.version }}-ochna"
+          docker run --rm -v "$PWD/out:/out" ubuntu:26.04 bash -c '
+            set -e
+            export DEBIAN_FRONTEND=noninteractive
+            apt-get update -qq
+            apt-get install -y -qq --no-install-recommends build-essential dkms kmod /out/linux-headers-*.deb >/dev/null
+            apt-get install -y -qq --no-install-recommends nvidia-dkms-580 >/dev/null || true
+            ver="$(ls /usr/src | sed -n "s/^nvidia-//p" | head -n1)"
+            [ -n "$ver" ] || { echo "nvidia dkms source missing"; exit 1; }
+            dkms build -m nvidia -v "$ver" -k "'"$krel"'"
+            ls /var/lib/dkms/nvidia/"$ver"/"'"$krel"'"/x86_64/module/
+          '
+
+  release:
+    needs: [check, build, nvidia]
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: kernel-debs
+          path: out
+      - env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ needs.check.outputs.version }}
+        run: |
+          tag="v$VERSION-ochna"
+          gh release view "$tag" >/dev/null 2>&1 && gh release delete "$tag" --yes --cleanup-tag
+          gh release create "$tag" out/*.deb out/SHA256SUMS --title "OchnaOS kernel $VERSION" --notes "linux $VERSION (kernel.org), local version -ochna."
+          sed -i "s/^built=.*/built=$VERSION/; s/^checked=.*/checked=$(date -u +%F)/" kernel/status
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -am "OCHNA-K2 (INFO): kernel $VERSION released"
+          git push
