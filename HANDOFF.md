@@ -3,7 +3,7 @@
 ## NEXT ACTION
 
 1. ⏳ **Build thử kernel ở máy anh** — cài gói build (`bison flex libssl-dev libelf-dev`), chạy `kernel/build.sh`, rồi thử boot trong máy ảo Ubuntu 26.04 (tiêu chí 1, 2).
-2. ⏳ **Chạy workflow `kernel` bằng tay một lần** — sau khi push; đo thời gian, đĩa, kết quả NVIDIA (tiêu chí 3 tới 5).
+2. ⏳ **Push rồi chạy workflow `kernel` bằng tay một lần** — chỉ push khi bước 1 boot được và chạy ổn trong VM; đo thời gian, đĩa, kết quả NVIDIA (tiêu chí 3 tới 5).
 
 ## Tồn đọng (backlog)
 

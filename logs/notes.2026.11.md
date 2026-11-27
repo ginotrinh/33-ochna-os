@@ -68,3 +68,8 @@ Tra bằng `gh search repos` (`bindeb-pkg`, `kernel build actions deb`, `custom 
 - Giữ `CONFIG_RUST=y` và cài toolchain (`rustc` 1.93.1, `rust-src`, `bindgen` 0.72.1, `libclang-dev`, kho Ubuntu 26.04), vì thiếu `rustc` thì `olddefconfig` âm thầm tắt Rust; `build.sh` dừng nếu `CONFIG_RUST=y` không còn.
 - Driver Rust có sẵn trong 6.18.65: `nova-core`, `nova` (NVIDIA có GSP, Turing trở lên, em suy luận chưa kiểm), `tyr` (Arm Mali), binder Android, `rnull`, PHY, firmware loader. Phần cứng P50 (Intel HD 530, Quadro M1000M Maxwell, iwlwifi, NVMe) đều dùng driver C.
 - Module Rust ngoài cây kernel phải build bằng đúng bản `rustc` đã build kernel; máy anh và CI cùng lấy `rustc` từ kho Ubuntu 26.04.
+
+## 2026-11-27 · ưu tiên Rust · `CLAUDE.md` luật 11
+
+- Anh chốt: ưu tiên Rust cho mã mới, chỉ sang C khi Rust không làm được (vd lõi kernel, driver chưa có abstractions Rust).
+- Anh chốt: chưa push; push khi kernel boot được và chạy ổn trong VM, vì push là bật lịch CI và đăng Release công khai.
