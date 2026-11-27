@@ -49,7 +49,7 @@ cp "$HERE/config/ubuntu-26.04.config" .config
 ./scripts/kconfig/merge_config.sh -m .config "$HERE/config/ochna.fragment" >/dev/null
 make olddefconfig >/dev/null
 # OCHNA-K1: fail early if the fragment did not survive olddefconfig
-for k in 'CONFIG_LOCALVERSION="-ochna"' 'CONFIG_RUST=y' 'CONFIG_DEBUG_INFO_BTF=y' 'CONFIG_DEBUG_INFO_BTF_MODULES=y'; do
+for k in 'CONFIG_LOCALVERSION="-ochna"' 'CONFIG_RUST=y' 'CONFIG_DEBUG_INFO_BTF=y' 'CONFIG_DEBUG_INFO_BTF_MODULES=y' 'CONFIG_DEBUG_INFO_COMPRESSED_ZSTD=y'; do
     grep -qxF "$k" .config || die "fragment not applied: $k"
 done
 

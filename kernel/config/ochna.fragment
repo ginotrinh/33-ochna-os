@@ -9,5 +9,7 @@ CONFIG_MODULE_SIG_KEY="certs/signing_key.pem"
 CONFIG_DEBUG_INFO_DWARF5=y
 CONFIG_DEBUG_INFO_BTF=y
 CONFIG_DEBUG_INFO_BTF_MODULES=y
+# OCHNA-K7: compress DWARF in objects to fit the CI runner disk
+CONFIG_DEBUG_INFO_COMPRESSED_ZSTD=y
 # OCHNA-K3: MODVERSIONS off so Rust builds without gendwarfksyms
 # CONFIG_MODVERSIONS is not set
