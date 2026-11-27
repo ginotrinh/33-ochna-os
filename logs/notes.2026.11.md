@@ -95,3 +95,10 @@ Tra bằng `gh search repos` (`bindeb-pkg`, `kernel build actions deb`, `custom 
 - 32 GB gồm: `.o` 17 GB, `.ko` 9.4 GB, `debian/` 0.7 GB, `vmlinux` 0.45 GB; gần hết là DWARF trong file object.
 - `kernel/vm-test.sh`: 4 PASS; hết 2 dòng `bpf-restrict-fs`, còn 6 dòng `fd0`. Đã kiểm: lỗi `bpf-restrict-fs` do thiếu BTF.
 - 32.8 GB không vừa 14 GB SSD tài liệu GitHub ghi cho runner chuẩn.
+
+## 2026-11-28 · OCHNA-K7 · đo build có BTF và nén zstd
+
+- 1:46:13 (BTF không nén 1:49:07); đỉnh `build/` 22.97 GiB (BTF không nén 31.3 GiB, không BTF 6.7 GiB, cùng đơn vị GiB); gói image 125 MB, headers 11 MB, không đổi.
+- Cây build: `.o` 10.9 GiB (17), `.ko` 6.0 GiB (9.4), `vmlinux` 233 MB (449). Nén chỉ giảm khoảng 27%.
+- `vmlinux` có `.BTF` và `.BTF_ids` (pahole đọc được DWARF nén). `kernel/vm-test.sh`: 4 PASS, không còn `bpf-restrict-fs`.
+- Vẫn quá 14 GB SSD tài liệu GitHub ghi; chưa đo dung lượng trống thật của runner.
