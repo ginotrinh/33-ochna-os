@@ -1,4 +1,4 @@
-# Build output: kernel trees, packages and images are rebuilt by scripts or CI, never committed.
+# Build output
 /build/
 /out/
 *.deb
@@ -9,18 +9,18 @@
 *.img
 *.qcow2
 
-# Proprietary or not freely licensed files stay on the build machine only.
+# Proprietary files
 fonts/private/
 *forticlient*
 
-# Secrets and local machine settings.
+# Secrets, local settings
 .env
 .env.*
 *.pem
 *.key
 .claude/settings.local.json
 
-# Editor and OS noise.
+# Editor, OS
 .vscode/
 *.swp
 .DS_Store
