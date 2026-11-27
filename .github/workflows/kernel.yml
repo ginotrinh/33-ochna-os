@@ -83,7 +83,7 @@ jobs:
             apt-get update -qq
             apt-get install -y -qq --no-install-recommends \
               build-essential bc bison flex cpio rsync kmod curl ca-certificates xz-utils python3 \
-              libssl-dev libelf-dev libdw-dev gawk dwarves dpkg-dev debhelper fakeroot zstd >/dev/null
+              libssl-dev libelf-dev libdw-dev gawk dwarves dpkg-dev debhelper fakeroot zstd rustc rust-src bindgen libclang-dev >/dev/null
             kernel/build.sh "${{ needs.check.outputs.version }}"
             chown -R '"$(id -u):$(id -g)"' out
           '

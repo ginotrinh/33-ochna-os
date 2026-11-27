@@ -61,3 +61,10 @@ Tra bằng `gh search repos` (`bindeb-pkg`, `kernel build actions deb`, `custom 
 - Chưa chạy thật: thời gian build trên runner 4 CPU, dung lượng đĩa, việc `nvidia-dkms-580` có trong kho mặc định của image `ubuntu:26.04`.
 - Sửa sau review: `build.sh` kiểm thêm `DEBUG_INFO_NONE=y` và BTF tắt sau `olddefconfig` (cấu hình lệch thì dừng sớm, không để CI build kèm debug info rồi hết đĩa); bước ghi ngày bỏ qua khi không đổi gì (chạy lại cùng ngày không lỗi); hai bước push rebase trước (job release push sau vài giờ, main có thể đã có commit mới); thêm `libdw-dev`, `gawk` theo `Build-Depends-Arch` của `scripts/package/mkdebian` bản 6.18.65.
 - Đã chạy ở máy anh: tải và kiểm sha256 6.18.65 đạt; `merge_config.sh` ra `DEBUG_INFO_NONE=y`, BTF tắt. Chưa chạy `olddefconfig` và build vì máy thiếu `bison flex libssl-dev libelf-dev libdw-dev dwarves gawk debhelper`.
+
+## 2026-11-27 · OCHNA-K3 · `kernel/config/ochna.fragment`, `kernel/build.sh`
+
+- Anh chốt: driver và giao diện mới viết bằng Rust. Lõi kernel vẫn là C (cần gcc); Rust chỉ dùng cho module, gọi sang C qua lớp abstractions và bindgen.
+- Giữ `CONFIG_RUST=y` và cài toolchain (`rustc` 1.93.1, `rust-src`, `bindgen` 0.72.1, `libclang-dev`, kho Ubuntu 26.04), vì thiếu `rustc` thì `olddefconfig` âm thầm tắt Rust; `build.sh` dừng nếu `CONFIG_RUST=y` không còn.
+- Driver Rust có sẵn trong 6.18.65: `nova-core`, `nova` (NVIDIA có GSP, Turing trở lên, em suy luận chưa kiểm), `tyr` (Arm Mali), binder Android, `rnull`, PHY, firmware loader. Phần cứng P50 (Intel HD 530, Quadro M1000M Maxwell, iwlwifi, NVMe) đều dùng driver C.
+- Module Rust ngoài cây kernel phải build bằng đúng bản `rustc` đã build kernel; máy anh và CI cùng lấy `rustc` từ kho Ubuntu 26.04.

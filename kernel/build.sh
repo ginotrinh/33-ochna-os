@@ -14,7 +14,7 @@ WANT="${1:-auto}"
 
 die() { echo "build.sh: $1" >&2; exit "${2:-1}"; }
 
-for t in curl xz make gcc bc bison flex dpkg-buildpackage rsync cpio python3; do
+for t in curl xz make gcc bc bison flex dpkg-buildpackage rsync cpio python3 rustc bindgen; do
     command -v "$t" >/dev/null || die "missing tool: $t" 2
 done
 
@@ -49,7 +49,7 @@ cp "$HERE/config/ubuntu-26.04.config" .config
 ./scripts/kconfig/merge_config.sh -m .config "$HERE/config/ochna.fragment" >/dev/null
 make olddefconfig >/dev/null
 # OCHNA-K1: fail early if the fragment did not survive olddefconfig
-for k in 'CONFIG_LOCALVERSION="-ochna"' 'CONFIG_DEBUG_INFO_NONE=y'; do
+for k in 'CONFIG_LOCALVERSION="-ochna"' 'CONFIG_DEBUG_INFO_NONE=y' 'CONFIG_RUST=y'; do
     grep -qxF "$k" .config || die "fragment not applied: $k"
 done
 grep -qx 'CONFIG_DEBUG_INFO_BTF=y' .config && die "fragment not applied: BTF still on"
