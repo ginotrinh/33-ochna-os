@@ -55,6 +55,8 @@ done
 grep -qx 'CONFIG_DEBUG_INFO_BTF=y' .config && die "fragment not applied: BTF still on"
 
 # OCHNA-K1: build packages
+# OCHNA-K5: neutral build identity in uname -v and package metadata
+export KBUILD_BUILD_USER=ochna KBUILD_BUILD_HOST=ochna-os DEBFULLNAME=OchnaOS DEBEMAIL=noreply@ochna.invalid
 make -j"$(nproc)" bindeb-pkg KDEB_PKGVERSION="$VERSION-1ochna" >/dev/null
 cd "$BUILD"
 rm -f "$OUT"/*.deb "$OUT"/SHA256SUMS

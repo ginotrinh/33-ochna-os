@@ -78,3 +78,8 @@ Tra bằng `gh search repos` (`bindeb-pkg`, `kernel build actions deb`, `custom 
 ## 2026-11-27 · OCHNA-K4 · `kernel/vm-test.sh`
 
 - Anh chốt: giai đoạn 1 thử kernel trên image cloud Ubuntu 26.04 (bàn thử, không phải nền OchnaOS). Lý do: chỉ kernel thay đổi, boot lỗi thì khoanh ngay vào kernel. Giai đoạn 2 đổi sang rootfs `debootstrap` của mình.
+
+## 2026-11-27 · OCHNA-K5 · `kernel/build.sh`
+
+- Build lần 2 ở máy anh: 1:25:35 với 8 luồng, RAM tối đa 1.8 GB, thư mục `build/` 6.7 GB; gói image 111 MB, headers 10 MB.
+- Gói ghi maintainer là user và tên máy build (`scripts/package/mkdebian` dòng 137 tới 145), `uname -v` ghi user và host. Đặt tên trung tính để Release công khai không mang tên máy; `.invalid` là tên miền dành riêng, không gửi thư được.
