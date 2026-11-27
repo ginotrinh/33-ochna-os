@@ -74,3 +74,7 @@ Tra bằng `gh search repos` (`bindeb-pkg`, `kernel build actions deb`, `custom 
 - Anh chốt: ưu tiên Rust cho mã mới, chỉ sang C khi Rust không làm được (vd lõi kernel, driver chưa có abstractions Rust).
 - Anh chốt: chưa push; push khi kernel boot được và chạy ổn trong VM, vì push là bật lịch CI và đăng Release công khai.
 - Build lần 1 dừng ở bước kiểm: `olddefconfig` tắt `CONFIG_RUST`. Nguyên nhân (`init/Kconfig` 6.18.65): `RUST` cần `!MODVERSIONS || GENDWARFKSYMS`, mà `GENDWARFKSYMS` cần `DEBUG_INFO`, đã tắt để tiết kiệm đĩa. Chọn tắt `MODVERSIONS` (kiểm phiên bản ký hiệu khi nạp module): module DKMS luôn build bằng headers của chính kernel này nên rủi ro thấp; phương án bị loại: bật lại debug info (build và gói lớn hơn, đĩa runner 14 GB), bỏ Rust (trái luật 11).
+
+## 2026-11-27 · OCHNA-K4 · `kernel/vm-test.sh`
+
+- Anh chốt: giai đoạn 1 thử kernel trên image cloud Ubuntu 26.04 (bàn thử, không phải nền OchnaOS). Lý do: chỉ kernel thay đổi, boot lỗi thì khoanh ngay vào kernel. Giai đoạn 2 đổi sang rootfs `debootstrap` của mình.
