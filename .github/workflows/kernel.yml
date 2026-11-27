@@ -1,9 +1,9 @@
 # OCHNA-K2: weekly kernel build, NVIDIA DKMS test, GitHub Release
 name: kernel
 
+# OCHNA-K8: weekly schedule off until the first manual run passes
+# schedule: cron "0 2 * * 1"
 on:
-  schedule:
-    - cron: "0 2 * * 1"
   workflow_dispatch:
     inputs:
       version:
@@ -71,12 +71,15 @@ jobs:
     steps:
       # OCHNA-K2: free runner disk before the kernel build
       - run: |
+          df -h / /mnt
           sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache /usr/local/share/boost
           sudo docker image prune -af >/dev/null
-          df -h /
+          df -h / /mnt
       - uses: actions/checkout@v4
       - name: build in ubuntu:26.04
         run: |
+          # OCHNA-K8: sample root disk use every 60 s to find the build peak
+          ( while sleep 60; do df --output=used -B1M / | tail -n1 >> /tmp/df-used.log; done ) &
           docker run --rm -v "$PWD:/w" -w /w ubuntu:26.04 bash -c '
             set -e
             export DEBIAN_FRONTEND=noninteractive
@@ -87,7 +90,11 @@ jobs:
             kernel/build.sh "${{ needs.check.outputs.version }}"
             chown -R '"$(id -u):$(id -g)"' out
           '
-          df -h /
+      # OCHNA-K8: disk report even when the build step fails
+      - if: always()
+        run: |
+          df -h / /mnt
+          echo "peak root used MiB: $(sort -n /tmp/df-used.log | tail -n1)"
       - uses: actions/upload-artifact@v4
         with:
           name: kernel-debs

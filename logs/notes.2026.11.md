@@ -102,3 +102,7 @@ Tra bằng `gh search repos` (`bindeb-pkg`, `kernel build actions deb`, `custom 
 - Cây build: `.o` 10.9 GiB (17), `.ko` 6.0 GiB (9.4), `vmlinux` 233 MB (449). Nén chỉ giảm khoảng 27%.
 - `vmlinux` có `.BTF` và `.BTF_ids` (pahole đọc được DWARF nén). `kernel/vm-test.sh`: 4 PASS, không còn `bpf-restrict-fs`.
 - Vẫn quá 14 GB SSD tài liệu GitHub ghi; chưa đo dung lượng trống thật của runner.
+
+## 2026-11-28 · OCHNA-K8 · `.github/workflows/kernel.yml`
+
+- Anh chọn: push, tạm tắt lịch tuần, chạy tay một lần để đo đĩa thật của runner (bản build BTF + zstd cần 23 GiB ở máy anh, tài liệu GitHub ghi 14 GB). Job build in `df` trước, sau dọn đĩa, và đỉnh dùng đĩa lấy mẫu mỗi 60 giây, kể cả khi build hỏng. Lần chạy tay vẫn đăng Release nếu build và NVIDIA đạt.
