@@ -5,6 +5,8 @@
 # Output: out/ochna-base.qcow2, out/ochna-base.txt (kernel, sizes, build time)
 # Exit: 0 built | 1 build or check failure | 2 missing tool
 set -euo pipefail
+# OCHNA-B4: UTF-8 locale so mkfs.ext4 (libarchive) can read UTF-8 path names in the tar
+export LC_ALL=C.UTF-8
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT="$(cd "$HERE/.." && pwd)"
