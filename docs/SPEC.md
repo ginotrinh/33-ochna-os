@@ -1,6 +1,6 @@
 # SPEC OchnaOS
 
-Duyệt: giai đoạn 1, 2026-11-27.
+Duyệt: giai đoạn 1, 2026-11-27; giai đoạn 2, 2026-11-28.
 
 ## Kiến trúc
 

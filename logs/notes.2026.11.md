@@ -131,3 +131,10 @@ Tra bằng `gh search repos` (`bindeb-pkg`, `kernel build actions deb`, `custom 
 - Tiêu chí 4 (không có kernel Ubuntu): `apt` có thể kéo `linux-image-generic` qua gói meta; nền phải chặn để kernel OchnaOS không bị thay.
 - Tiêu chí 5 (NVIDIA): gói headers giai đoạn 1 đã khai `Depends` (`OCHNA-K10`), image tối giản là phép thử thật cho việc đó.
 - Dựng image trên CI để sang giai đoạn 4, cùng đợt đóng gói.
+
+## 2026-11-28 · PLAN giai đoạn 2 · `docs/PLAN.md`
+
+- Không root: `mmdebstrap --mode=unshare` (máy có `apparmor_restrict_unprivileged_userns=1`, Ubuntu cho phép riêng `/usr/bin/mmdebstrap` qua profile); `mke2fs` 1.47.2 nhận tar ở `-d` nên giữ đúng chủ sở hữu file mà không cần giải nén bằng root; ESP dựng bằng `mtools`.
+- Không cài gói `systemd-boot` (postinst gọi `bootctl install`, cần ESP thật lúc dựng); chỉ lấy `systemd-boot-efi` và tự viết mục loader. Hệ quả: kernel mới cài bằng `apt` chưa tự vào ESP; việc đó để lệnh cập nhật ở giai đoạn 4.
+- Không nướng khoá vào image: xoá khoá host `ssh` sau khi dựng, tạo lại lúc boot; tài khoản thử dùng credential systemd `ssh.authorized_keys.root` (`/usr/lib/tmpfiles.d/provision.conf`) truyền lúc chạy máy ảo. Đăng nhập console kiểm bằng dấu nhắc `login:` trên cổng serial và đăng nhập `ssh` bằng khoá thử.
+- Firmware: Ubuntu 26.04 tách `linux-firmware` thành gói nhỏ; lấy `linux-firmware-intel-wireless` (Wi-Fi) và `linux-firmware-intel-graphics` (HD 530).
