@@ -1,9 +1,10 @@
 # OCHNA-K2: weekly kernel build, NVIDIA DKMS test, GitHub Release
 name: kernel
 
-# OCHNA-K8: weekly schedule off until the first manual run passes
-# schedule: cron "0 2 * * 1"
 on:
+  # OCHNA-K12: every Monday 02:00 UTC
+  schedule:
+    - cron: "0 2 * * 1"
   workflow_dispatch:
     inputs:
       version:

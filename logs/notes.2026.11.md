@@ -120,3 +120,7 @@ Tra bằng `gh search repos` (`bindeb-pkg`, `kernel build actions deb`, `custom 
 ## 2026-11-28 · run `46082094150`
 
 - Cả 4 job đạt: build 1:25:47, đỉnh `/` 56947 MiB; nvidia build ra `nvidia.ko`; Release `v6.18.65-ochna` có 3 file; bot commit `kernel/status` (`e38a638`). Thời gian build trên runner dao động 1:25 tới 2:00 qua 3 lần chạy.
+
+## 2026-11-28 · OCHNA-K12 · lịch tuần
+
+- Anh duyệt bật lại lịch sau lần chạy tay đạt (`46082094150`). Lần chạy theo lịch đầu tiên: thứ Hai 2026-11-30 02:00 UTC; 6.18.65 đã có trong `kernel/status` nên nếu chưa có bản vá mới thì chỉ ghi ngày kiểm.
