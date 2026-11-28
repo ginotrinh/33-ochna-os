@@ -138,3 +138,8 @@ Tra bằng `gh search repos` (`bindeb-pkg`, `kernel build actions deb`, `custom 
 - Không cài gói `systemd-boot` (postinst gọi `bootctl install`, cần ESP thật lúc dựng); chỉ lấy `systemd-boot-efi` và tự viết mục loader. Hệ quả: kernel mới cài bằng `apt` chưa tự vào ESP; việc đó để lệnh cập nhật ở giai đoạn 4.
 - Không nướng khoá vào image: xoá khoá host `ssh` sau khi dựng, tạo lại lúc boot; tài khoản thử dùng credential systemd `ssh.authorized_keys.root` (`/usr/lib/tmpfiles.d/provision.conf`) truyền lúc chạy máy ảo. Đăng nhập console kiểm bằng dấu nhắc `login:` trên cổng serial và đăng nhập `ssh` bằng khoá thử.
 - Firmware: Ubuntu 26.04 tách `linux-firmware` thành gói nhỏ; lấy `linux-firmware-intel-wireless` (Wi-Fi) và `linux-firmware-intel-graphics` (HD 530).
+
+## 2026-11-28 · OCHNA-B3 · `.github/workflows/base.yml`, `docs/SPEC.md`
+
+- Anh ở xa, máy không có `mmdebstrap` và không có `sudo` không cần mật khẩu, Tailscale đăng xuất. Anh chọn: dựng image trên GitHub Actions (container `ubuntu:26.04` chạy `--privileged`, `mmdebstrap` chế độ `root`), tải artifact về máy anh và chạy `base/vm-test.sh` (chỉ cần QEMU, KVM). SPEC đổi: thêm mục 4 "Cái gì", bỏ "dựng image trên CI" khỏi ngoài phạm vi; anh duyệt cùng ngày. Tiêu chí 1 (dựng không cần `sudo` ở máy anh) vẫn chờ anh cài `mmdebstrap`.
+- Phương án bị loại: chạy `mmdebstrap` giải nén từ `.deb` ở chế độ `fakechroot` (profile AppArmor chỉ cho đường dẫn `/usr/bin/mmdebstrap` dùng user namespace; `fakechroot` hay hỏng ở maintainer script).

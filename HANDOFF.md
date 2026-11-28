@@ -6,7 +6,9 @@
 2. ✅ **XONG 2026-11-28 (Lucina):** anh chọn giữ BTF và nén zstd; build 1:46:13, đỉnh 23.0 GiB, VM test 4 PASS, hết `bpf-restrict-fs` (`b52c8ed`) ~~**Đo build có BTF rồi anh chốt giữ BTF**~~
 3. ✅ **XONG 2026-11-28 (Lucina):** run `46082094150` đạt cả 4 job, Release `v6.18.65-ochna`; 2 run trước hỏng NVIDIA vì gói headers thiếu `Depends` (sửa `OCHNA-K10`) ~~**Đọc kết quả lần chạy tay đầu tiên của workflow `kernel`**~~
 4. ⏳ **Kiểm lần chạy theo lịch đầu tiên (thứ Hai 2026-11-30, 02:00 UTC tức 09:00 giờ VN)** — lịch đã bật (`OCHNA-K12`); tiêu chí 4 chỉ đạt khi có một lần chạy theo lịch (tuần có bản mới thì build, không có thì ghi `kernel/status`).
-5. ⏳ **Anh duyệt SPEC giai đoạn 2 (nền)** — `docs/SPEC.md` mục "Giai đoạn 2"; duyệt thì thêm dòng `Duyệt:` rồi em lập plan và làm `base/`.
+5. ✅ **XONG 2026-11-28 (Lucina):** anh duyệt SPEC giai đoạn 2, sửa cùng ngày thêm dựng image trên CI ~~**Anh duyệt SPEC giai đoạn 2 (nền)**~~
+6. ⏳ **Dựng image nền trên CI rồi thử trong VM ở máy anh** — workflow `base` (chạy tay), tải artifact `ochna-base` bằng `gh run download`, chạy `base/vm-test.sh` (tiêu chí 2 tới 6).
+7. ⏳ **Kiểm tiêu chí 1 giai đoạn 2 ở máy anh** — chờ anh cài `mmdebstrap` (`sudo apt-get install -y mmdebstrap arch-test`), rồi chạy `base/build.sh` không `sudo`.
 
 ## Tồn đọng (backlog)
 

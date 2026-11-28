@@ -1,6 +1,6 @@
 # SPEC OchnaOS
 
-Duyệt: giai đoạn 1, 2026-11-27; giai đoạn 2, 2026-11-28.
+Duyệt: giai đoạn 1, 2026-11-27; giai đoạn 2, 2026-11-28 (sửa: thêm dựng image trên CI, cùng ngày).
 
 ## Kiến trúc
 
@@ -34,6 +34,7 @@ Duyệt: giai đoạn 1, 2026-11-27; giai đoạn 2, 2026-11-28.
 1. `base/`: danh sách gói, cấu hình hệ thống, script dựng một lệnh ra image đĩa UEFI từ kho Ubuntu 26.04 bằng `mmdebstrap`, không cần `sudo`.
 2. Image gồm: kernel OchnaOS từ GitHub Releases, `systemd-boot`, systemd, `apt`, NetworkManager, `openssh-server`, `sudo`, firmware Wi-Fi Intel, microcode Intel. Chỉ console.
 3. Script thử: boot image trong máy ảo UEFI ở máy anh, kiểm các tiêu chí dưới.
+4. Workflow chạy tay `base` trên GitHub Actions dựng image và tải lên artifact, để thử khi máy anh chưa có `mmdebstrap`.
 
 **Done when:**
 - [ ] 1. Một lệnh ở máy anh dựng ra image đĩa từ danh sách gói trong repo, không cần `sudo`; ghi thời gian dựng và kích thước image.
@@ -43,7 +44,7 @@ Duyệt: giai đoạn 1, 2026-11-27; giai đoạn 2, 2026-11-28.
 - [ ] 5. `nvidia-dkms-580` cài được trong image và build module cho kernel OchnaOS.
 - [ ] 6. Repo và image không có mật khẩu hay khoá viết cứng; tài khoản và khoá dùng để thử tạo lúc chạy script thử.
 
-**Ngoài phạm vi:** desktop, trình cài, cài lên P50, ISO live, ký Secure Boot, kho `apt` có ký, dựng image trên CI.
+**Ngoài phạm vi:** desktop, trình cài, cài lên P50, ISO live, ký Secure Boot, kho `apt` có ký, phát hành image.
 
 ## Các giai đoạn sau (phác thảo)
 

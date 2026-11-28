@@ -1,0 +1,34 @@
+# OCHNA-B3: manual build of the base image for VM tests, uploaded as an artifact
+name: base
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - name: build in ubuntu:26.04
+        run: |
+          docker run --rm --privileged -v "$PWD:/w" -w /w ubuntu:26.04 bash -c '
+            set -e
+            export DEBIAN_FRONTEND=noninteractive
+            apt-get update -qq
+            apt-get install -y -qq --no-install-recommends \
+              mmdebstrap e2fsprogs dosfstools mtools fdisk qemu-utils curl ca-certificates python3 >/dev/null
+            MMDEBSTRAP_MODE=root base/build.sh
+            chown -R '"$(id -u):$(id -g)"' out
+          '
+          df -h /
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ochna-base
+          path: |
+            out/ochna-base.qcow2
+            out/ochna-base.txt
+          retention-days: 3
