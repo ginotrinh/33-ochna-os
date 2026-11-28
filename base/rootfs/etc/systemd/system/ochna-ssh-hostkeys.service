@@ -1,0 +1,12 @@
+# OCHNA-B1: create SSH host keys on first boot; the image ships without them
+[Unit]
+Description=Generate SSH host keys
+ConditionPathExistsGlob=!/etc/ssh/ssh_host_*_key
+Before=ssh.service ssh.socket
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/ssh-keygen -A
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,3 @@
+# OCHNA-B1: filesystems of the OchnaOS base image
+LABEL=ochna-root  /          ext4  defaults    0  1
+LABEL=OCHNA-ESP   /boot/efi  vfat  umask=0077  0  1

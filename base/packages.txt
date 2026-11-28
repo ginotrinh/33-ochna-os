@@ -1,0 +1,22 @@
+# OCHNA-B1: packages of the OchnaOS base image, one per line
+systemd-sysv
+udev
+dbus
+kmod
+apt
+ca-certificates
+initramfs-tools
+zstd
+systemd-boot-efi
+network-manager
+wpasupplicant
+openssh-server
+sudo
+iproute2
+iputils-ping
+curl
+less
+e2fsprogs
+linux-firmware-intel-wireless
+linux-firmware-intel-graphics
+intel-microcode

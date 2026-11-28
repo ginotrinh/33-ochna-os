@@ -1,0 +1,4 @@
+# OCHNA-B1: never install Ubuntu kernels; the OchnaOS kernel comes from its own packages
+Package: linux-image-* linux-headers-* linux-modules-* linux-generic* linux-signed-* linux-kernel-* linux-virtual*
+Pin: release o=Ubuntu
+Pin-Priority: -1
