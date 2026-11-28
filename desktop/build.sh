@@ -49,6 +49,7 @@ cd src
 # OCHNA-D2: some justfiles read SOURCE_DATE_EPOCH; use the commit time for reproducible builds
 SOURCE_DATE_EPOCH="$(git log -1 --format=%ct)"
 export SOURCE_DATE_EPOCH
+export SOURCE_GIT_HASH="$SHA"
 apt-get build-dep -y -qq . >/dev/null
 if [ -f justfile ] && grep -qE '^vendor' justfile; then
     just vendor >/dev/null
