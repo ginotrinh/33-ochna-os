@@ -143,3 +143,7 @@ Tra bằng `gh search repos` (`bindeb-pkg`, `kernel build actions deb`, `custom 
 
 - Anh ở xa, máy không có `mmdebstrap` và không có `sudo` không cần mật khẩu, Tailscale đăng xuất. Anh chọn: dựng image trên GitHub Actions (container `ubuntu:26.04` chạy `--privileged`, `mmdebstrap` chế độ `root`), tải artifact về máy anh và chạy `base/vm-test.sh` (chỉ cần QEMU, KVM). SPEC đổi: thêm mục 4 "Cái gì", bỏ "dựng image trên CI" khỏi ngoài phạm vi; anh duyệt cùng ngày. Tiêu chí 1 (dựng không cần `sudo` ở máy anh) vẫn chờ anh cài `mmdebstrap`.
 - Phương án bị loại: chạy `mmdebstrap` giải nén từ `.deb` ở chế độ `fakechroot` (profile AppArmor chỉ cho đường dẫn `/usr/bin/mmdebstrap` dùng user namespace; `fakechroot` hay hỏng ở maintainer script).
+
+## 2026-11-28 · OCHNA-B4 · `base/build.sh`
+
+- Run `46110726244` hỏng sau 23 giây: `api.github.com` trả 403 cho runner (gọi không token; em đoán do giới hạn lượt gọi dùng chung theo IP runner, chưa kiểm). Sửa: lấy bản kernel từ `kernel/status`, tải thẳng `SHA256SUMS` và các file nó liệt kê từ `releases/download/v<bản>-ochna/`; không cần API, bản tải luôn khớp bản CI đã phát hành. Đã thử đoạn tải ở máy anh: 2 file khớp sha256.

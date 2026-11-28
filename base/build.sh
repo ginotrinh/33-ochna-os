@@ -21,7 +21,7 @@ START="$(date +%s)"
 die() { echo "base/build.sh: $1" >&2; exit "${2:-1}"; }
 log() { echo "base/build.sh: $*"; }
 
-for t in mmdebstrap mkfs.ext4 mkfs.vfat mmd mcopy sfdisk qemu-img curl sha256sum python3; do
+for t in mmdebstrap mkfs.ext4 mkfs.vfat mmd mcopy sfdisk qemu-img curl sha256sum; do
     command -v "$t" >/dev/null || die "missing tool: $t" 2
 done
 
@@ -32,11 +32,13 @@ mkdir -p "$WORK/kernel" "$OUT"
 if [ -n "${KERNEL_DIR:-}" ]; then
     cp "$KERNEL_DIR"/linux-image-*-ochna_*.deb "$KERNEL_DIR"/linux-headers-*-ochna_*.deb "$KERNEL_DIR"/SHA256SUMS "$WORK/kernel/"
 else
-    curl -fsSL "https://api.github.com/repos/$REPO/releases/latest" | python3 -c "
-import json, sys
-for a in json.load(sys.stdin)['assets']:
-    print(a['browser_download_url'])" | while read -r url; do
-        curl -fsSL -o "$WORK/kernel/${url##*/}" "$url"
+    # OCHNA-B4: release tag from kernel/status; direct download URLs avoid the API rate limit
+    KVER="${KERNEL_VERSION:-$(sed -n 's/^built=//p' "$ROOT/kernel/status")}"
+    [ -n "$KVER" ] || die "no built kernel in kernel/status"
+    BASE_URL="https://github.com/$REPO/releases/download/v$KVER-ochna"
+    curl -fsSL -o "$WORK/kernel/SHA256SUMS" "$BASE_URL/SHA256SUMS"
+    awk '{sub(/^\.\//, "", $2); print $2}' "$WORK/kernel/SHA256SUMS" | while read -r f; do
+        curl -fsSL -o "$WORK/kernel/$f" "$BASE_URL/$f"
     done
 fi
 (cd "$WORK/kernel" && sha256sum -c SHA256SUMS) || die "kernel checksum mismatch"
