@@ -1,0 +1,59 @@
+#!/bin/bash
+# OCHNA-U2: keep the ESP in step with the installed OchnaOS kernels (systemd-boot entries).
+# Called by /etc/kernel/postinst.d, /etc/kernel/postrm.d and /etc/initramfs/post-update.d; safe to run any time.
+# Layout: $ESP/ochna/<release>/{vmlinuz,initrd.img}, $ESP/loader/entries/ochna-<release>.conf
+# Keeps the newest KEEP kernels on the ESP, default entry = newest version.
+set -euo pipefail
+
+ESP="${ESP:-/boot/efi}"
+KEEP="${KEEP:-3}"
+CMDLINE="$(cat /etc/kernel/cmdline)"
+
+log() { echo "ochna-esp-sync: $*"; }
+
+if ! mountpoint -q "$ESP"; then
+    log "$ESP not mounted, skipped"
+    exit 0
+fi
+mkdir -p "$ESP/ochna" "$ESP/loader/entries"
+
+sync_file() {
+    cmp -s "$1" "$2" 2>/dev/null && return 0
+    cp "$1" "$2.tmp"
+    mv -f "$2.tmp" "$2"
+}
+
+# OCHNA-U2: installed kernels that have an initrd, newest first
+mapfile -t ALL < <(for v in /boot/vmlinuz-*-ochna; do
+    [ -e "$v" ] || continue
+    k="${v#/boot/vmlinuz-}"
+    [ -f "/boot/initrd.img-$k" ] && echo "$k"
+done | sort -rV)
+KEPT=("${ALL[@]:0:$KEEP}")
+
+for k in "${KEPT[@]}"; do
+    mkdir -p "$ESP/ochna/$k"
+    sync_file "/boot/vmlinuz-$k" "$ESP/ochna/$k/vmlinuz"
+    sync_file "/boot/initrd.img-$k" "$ESP/ochna/$k/initrd.img"
+    printf 'title OchnaOS\nversion %s\nsort-key ochna\nlinux /ochna/%s/vmlinuz\ninitrd /ochna/%s/initrd.img\noptions %s\n' \
+        "$k" "$k" "$k" "$CMDLINE" > "$ESP/loader/entries/ochna-$k.conf"
+done
+
+# OCHNA-U2: drop entries and files of kernels that are removed or beyond KEEP
+for e in "$ESP"/loader/entries/ochna-*.conf; do
+    [ -e "$e" ] || continue
+    k="$(basename "$e" .conf)"; k="${k#ochna-}"
+    if ! printf '%s\n' "${KEPT[@]}" | grep -qxF "$k"; then
+        rm -f "$e"
+        rm -rf "${ESP:?}/ochna/$k"
+        log "removed $k"
+    fi
+done
+
+if [ "${#KEPT[@]}" -gt 0 ]; then
+    printf 'default ochna-%s.conf\ntimeout 3\n' "${KEPT[0]}" > "$ESP/loader/loader.conf.tmp"
+    mv -f "$ESP/loader/loader.conf.tmp" "$ESP/loader/loader.conf"
+    log "default ${KEPT[0]}; on ESP: ${KEPT[*]}"
+else
+    log "no OchnaOS kernel installed, loader.conf left as is"
+fi

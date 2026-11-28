@@ -1,0 +1,3 @@
+#!/bin/sh
+# OCHNA-U2: sync OchnaOS kernels to the ESP after kernel or initrd changes
+exec /usr/lib/ochna/esp-sync

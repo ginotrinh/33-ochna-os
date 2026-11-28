@@ -81,14 +81,16 @@ if tar -tf "$WORK/rootfs.tar" | grep -E '(^|/)\.ssh/authorized_keys$'; then die 
 ESP="$WORK/esp.img"
 truncate -s "${ESP_MIB}M" "$ESP"
 mkfs.vfat -F 32 -n OCHNA-ESP "$ESP" >/dev/null
-mmd -i "$ESP" ::/EFI ::/EFI/BOOT ::/loader ::/loader/entries ::/ochna
+# OCHNA-U2: same layout and entry format as base/rootfs/usr/lib/ochna/esp-sync
+mmd -i "$ESP" ::/EFI ::/EFI/BOOT ::/loader ::/loader/entries ::/ochna "::/ochna/$KREL"
 mcopy -i "$ESP" "$WORK/systemd-bootx64.efi" ::/EFI/BOOT/BOOTX64.EFI
-mcopy -i "$ESP" "$WORK/vmlinuz" ::/ochna/vmlinuz
-mcopy -i "$ESP" "$WORK/initrd.img" ::/ochna/initrd.img
-printf 'default ochna.conf\ntimeout 3\n' > "$WORK/loader.conf"
-printf 'title OchnaOS\nlinux /ochna/vmlinuz\ninitrd /ochna/initrd.img\noptions root=LABEL=ochna-root rw console=tty0 console=ttyS0,115200\n' > "$WORK/ochna.conf"
+mcopy -i "$ESP" "$WORK/vmlinuz" "::/ochna/$KREL/vmlinuz"
+mcopy -i "$ESP" "$WORK/initrd.img" "::/ochna/$KREL/initrd.img"
+printf 'default ochna-%s.conf\ntimeout 3\n' "$KREL" > "$WORK/loader.conf"
+printf 'title OchnaOS\nversion %s\nsort-key ochna\nlinux /ochna/%s/vmlinuz\ninitrd /ochna/%s/initrd.img\noptions %s\n' \
+    "$KREL" "$KREL" "$KREL" "$(cat "$HERE/rootfs/etc/kernel/cmdline")" > "$WORK/entry.conf"
 mcopy -i "$ESP" "$WORK/loader.conf" ::/loader/loader.conf
-mcopy -i "$ESP" "$WORK/ochna.conf" ::/loader/entries/ochna.conf
+mcopy -i "$ESP" "$WORK/entry.conf" "::/loader/entries/ochna-$KREL.conf"
 
 # OCHNA-B1: root partition filled from the tar, ownership kept
 truncate -s "$ROOT_SIZE" "$WORK/root.img"
