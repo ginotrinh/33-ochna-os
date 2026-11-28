@@ -176,3 +176,9 @@ Tra bằng `gh search repos` (`bindeb-pkg`, `kernel build actions deb`, `custom 
 - `esp-sync` đồng bộ theo trạng thái (không theo sự kiện): đọc kernel đang có trong `/boot`, giữ 3 bản mới nhất trên ESP, mặc định bản số cao nhất (`sort -V`). Chọn cách này để ba hook (cài, gỡ, dựng lại initrd) cùng gọi một lệnh, chạy lại bao nhiêu lần cũng ra cùng kết quả. Bỏ qua khi `/boot/efi` chưa mount (lúc dựng image trong chroot).
 - Thử: kernel 6.18.64 build trên CI với `publish=false` (không Release, không đổi `kernel/status`), image dựng bằng kernel đó (`kernel_run`), rồi cập nhật lên 6.18.65 qua `apt`. 6 PASS. Mỗi bản chiếm 78 MiB trên ESP 512 MiB khi chưa cài NVIDIA; initrd có thể lớn hơn khi có thêm module, chưa đo.
 - Anh duyệt: thư mục `desktop/` dùng `LICENSE` GPL-3.0 riêng (bản vá cho mã COSMIC GPL-3.0).
+
+## 2026-11-28 · OCHNA-D1 · `desktop/`
+
+- `desktop/LICENSE` GPL-3.0 (anh duyệt): bản vá cho mã COSMIC theo giấy phép của mã đó.
+- 22 thành phần COSMIC ghim theo commit submodule của `pop-os/cosmic-epoch` tag `epoch-1.11.0` (Release mới nhất, 2026-10-20; tag `epoch-1.12.0` có nhưng chưa thành Release). Bỏ: store, player, viewer, initial-setup, osk, monitor, edit, sound-theme, simple-wrapper (chưa cần cho vòng 1).
+- Build: mỗi thành phần một job CI song song trong `ubuntu:26.04`, `apt-get build-dep` theo `debian/control`, `just vendor` nếu có, `dpkg-buildpackage -b`. Lấy mã ở GitHub theo commit, không dùng kho `apt` của Pop.

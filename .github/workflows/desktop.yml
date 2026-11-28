@@ -1,0 +1,54 @@
+# OCHNA-D1: manual build of the COSMIC components for ochna-aero, one job per component
+name: desktop
+
+on:
+  workflow_dispatch:
+    inputs:
+      only:
+        description: "Space-separated component names, empty = all of desktop/components.txt"
+        required: false
+        default: ""
+
+permissions:
+  contents: read
+
+jobs:
+  list:
+    runs-on: ubuntu-24.04
+    outputs:
+      names: ${{ steps.l.outputs.names }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: l
+        env:
+          ONLY: ${{ inputs.only }}
+        run: |
+          if [ -n "$ONLY" ]; then names="$ONLY"; else names="$(grep -vE '^\s*(#|$)' desktop/components.txt | awk '{print $1}' | xargs)"; fi
+          echo "names=$(printf '%s\n' $names | python3 -c 'import json,sys;print(json.dumps([l.strip() for l in sys.stdin if l.strip()]))')" >> "$GITHUB_OUTPUT"
+
+  build:
+    needs: list
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      matrix:
+        name: ${{ fromJson(needs.list.outputs.names) }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: build ${{ matrix.name }} in ubuntu:26.04
+        run: |
+          docker run --rm -v "$PWD:/w" -w /w ubuntu:26.04 bash -c '
+            set -e
+            export DEBIAN_FRONTEND=noninteractive
+            sed -i "s/^Types: deb$/Types: deb deb-src/" /etc/apt/sources.list.d/ubuntu.sources
+            apt-get update -qq
+            apt-get install -y -qq --no-install-recommends git ca-certificates build-essential devscripts equivs dpkg-dev debhelper just cargo rustc >/dev/null
+            desktop/build.sh "${{ matrix.name }}"
+            chown -R '"$(id -u):$(id -g)"' out
+          '
+      - uses: actions/upload-artifact@v4
+        with:
+          name: desktop-${{ matrix.name }}
+          path: out/desktop/${{ matrix.name }}/
+          retention-days: 7
