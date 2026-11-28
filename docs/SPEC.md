@@ -38,11 +38,11 @@ Duyệt: giai đoạn 1, 2026-11-27; giai đoạn 2, 2026-11-28 (sửa: thêm d�
 
 **Done when:**
 - [ ] 1. Một lệnh ở máy anh dựng ra image đĩa từ danh sách gói trong repo, không cần `sudo`; ghi thời gian dựng và kích thước image.
-- [ ] 2. Máy ảo UEFI boot image qua `systemd-boot` vào kernel OchnaOS; `uname -r` ra bản OchnaOS; đăng nhập console được.
-- [ ] 3. NetworkManager có địa chỉ và ra internet; `ssh` vào được; ổ đĩa ghi đọc được.
-- [ ] 4. `apt update` và `apt upgrade` chạy được; image không có gói kernel của Ubuntu, `apt upgrade` không cài kernel Ubuntu.
-- [ ] 5. `nvidia-dkms-580` cài được trong image và build module cho kernel OchnaOS.
-- [ ] 6. Repo và image không có mật khẩu hay khoá viết cứng; tài khoản và khoá dùng để thử tạo lúc chạy script thử.
+- [x] 2. Máy ảo UEFI boot image qua `systemd-boot` vào kernel OchnaOS; `uname -r` ra bản OchnaOS; đăng nhập console được. — bằng chứng: `base/vm-test.sh` 2026-11-28, image từ run `46117066579`: `uname -r` 6.18.65-ochna, biến EFI `LoaderInfo` có (systemd-boot), serial hiện `ochna login:`, đăng nhập `ssh` root bằng khoá thử.
+- [x] 3. NetworkManager có địa chỉ và ra internet; `ssh` vào được; ổ đĩa ghi đọc được. — bằng chứng: cùng lần thử: `nmcli` báo `connected`, https kernel.org đạt, ghi đọc 256 MiB đạt.
+- [x] 4. `apt update` và `apt upgrade` chạy được; image không có gói kernel của Ubuntu, `apt upgrade` không cài kernel Ubuntu. — bằng chứng: cùng lần thử: `apt-get update` và `upgrade` đạt; chỉ có `linux-image-6.18.65-ochna`; `apt-get -s install linux-generic` bị từ chối.
+- [x] 5. `nvidia-dkms-580` cài được trong image và build module cho kernel OchnaOS. — bằng chứng: cùng lần thử: `nvidia-dkms-580` cài và `dkms status` báo installed cho 6.18.65-ochna.
+- [x] 6. Repo và image không có mật khẩu hay khoá viết cứng; tài khoản và khoá dùng để thử tạo lúc chạy script thử. — bằng chứng: `base/build.sh` kiểm tar không có `ssh_host_*`, `authorized_keys`, root khoá mật khẩu (run `46117066579` đạt); `git grep` khoá hay mật khẩu trong repo: không có (2026-11-28).
 
 **Ngoài phạm vi:** desktop, trình cài, cài lên P50, ISO live, ký Secure Boot, kho `apt` có ký, phát hành image.
 
