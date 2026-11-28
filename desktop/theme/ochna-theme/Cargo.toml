@@ -1,0 +1,13 @@
+[package]
+name = "ochna-theme"
+version = "0.1.0"
+edition = "2024"
+license = "GPL-3.0-only"
+publish = false
+
+[dependencies]
+cosmic-theme = { git = "https://github.com/pop-os/libcosmic", rev = "430f3d48a97d8779f9c1985473912e594ccca1ae", default-features = false }
+cosmic-config = { git = "https://github.com/pop-os/libcosmic", rev = "430f3d48a97d8779f9c1985473912e594ccca1ae", default-features = false, features = ["macro"] }
+serde = { version = "1", features = ["derive"] }
+ron = "0.12"
+png = "0.17"

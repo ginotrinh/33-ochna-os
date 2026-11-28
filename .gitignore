@@ -25,3 +25,4 @@ fonts/private/
 *.swp
 .DS_Store
 __pycache__/
+/desktop/theme/ochna-theme/target/

@@ -1,0 +1,27 @@
+// OCHNA-D7: ochna-aero light theme, colours from gino-style.css
+(
+    accent: "#1559a8",
+    bg_color: "#dcebf8",
+    corner_radii: (
+        radius_0: (0.0, 0.0, 0.0, 0.0),
+        radius_xs: (6.0, 6.0, 6.0, 6.0),
+        radius_s: (12.0, 12.0, 12.0, 12.0),
+        radius_m: (20.0, 20.0, 20.0, 20.0),
+        radius_l: (26.0, 26.0, 26.0, 26.0),
+        radius_xl: (160.0, 160.0, 160.0, 160.0),
+    ),
+    frosted: true,
+    interface_font: "Roboto Condensed",
+    icon_theme: "Cosmic",
+    wallpaper: (
+        file: "ochna-aero.png",
+        width: 3840,
+        height: 2160,
+        stops: [(0.0, "#4a90d6"), (0.25, "#96c6ef"), (0.56, "#d8eaf9"), (1.0, "#eef6fd")],
+        blobs: [
+            (x: 0.12, y: 0.12, r: 0.40, color: "#78c8ff", alpha: 0.55),
+            (x: 0.88, y: 0.34, r: 0.34, color: "#a08cff", alpha: 0.35),
+            (x: 0.30, y: 0.94, r: 0.47, color: "#6edcd2", alpha: 0.30),
+        ],
+    ),
+)

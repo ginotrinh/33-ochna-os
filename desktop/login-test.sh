@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # OCHNA-D6: boot the desktop image with display, create a test user over SSH, log in through the greeter, save screenshots.
-# Usage: desktop/login-test.sh   (needs out/ochna-base.qcow2 built with the desktop, OVMF, KVM, python3-pil)
+# Usage: desktop/login-test.sh [extra.deb ...]   (needs out/ochna-base.qcow2 built with the desktop, OVMF, KVM, python3-pil)
+# Extra .deb files are installed into the running VM before the test user is created.
 # Output: build/greeter-user.png, build/desktop-first.png, session and process list on stdout
 set -uo pipefail
 R=/home/gino/Desktop/projects/33-ochna-os
@@ -30,6 +31,12 @@ qemu-system-x86_64 -enable-kvm -cpu host -m 4096 -smp 4 -machine q35 \
     -daemonize -pidfile "$V/shot.pid"
 for _ in $(seq 1 60); do "${SSH[@]}" true 2>/dev/null && break; sleep 3; done
 echo "pam_env locale errors this boot: $("${SSH[@]}" 'journalctl -b | grep -c "Unable to open env file: /etc/default/locale"')"
+# OCHNA-D7: install extra packages given on the command line
+if [ "$#" -gt 0 ]; then
+    scp -q -i "$KEY" -P 2235 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$@" root@127.0.0.1:/tmp/
+    names="$(for f in "$@"; do printf '/tmp/%s ' "$(basename "$f")"; done)"
+    "${SSH[@]}" "apt-get update -qq && DEBIAN_FRONTEND=noninteractive apt-get install -y -qq --no-install-recommends $names" 2>&1 | tail -3
+fi
 "${SSH[@]}" "useradd -m -s /bin/bash -G sudo,video,audio,render ochna && echo 'ochna:$PW' | chpasswd && systemctl restart cosmic-greeter"
 sleep 25
 shot greeter-user
@@ -41,5 +48,9 @@ print('\n'.join('sendkey ' + m.get(c, c) for c in sys.argv[1]))" "$PW")"
 mon "$keys" "sendkey ret"
 sleep 40
 shot desktop-first
+# OCHNA-D7: open Settings in the user's session to see the theme on an app window
+"${SSH[@]}" 'u=$(id -u ochna); sock=$(ls /run/user/$u | grep -m1 "^wayland-[0-9]*$"); setsid sudo -u ochna env XDG_RUNTIME_DIR=/run/user/$u WAYLAND_DISPLAY=$sock cosmic-settings >/dev/null 2>&1 < /dev/null &'
+sleep 12
+shot desktop-app
 "${SSH[@]}" 'loginctl list-sessions --no-legend; pgrep -a cosmic | awk "{print \$2}" | sort -u | xargs' 2>&1
 kill "$(cat "$V/shot.pid")"
