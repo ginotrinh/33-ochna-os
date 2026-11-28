@@ -73,13 +73,17 @@ fi
 if [ -f vendor.tar ]; then
     mkdir ../vendor-x
     tar -C ../vendor-x -pxf vendor.tar
-    for crate in $(grep -rlIE --include='*.ftl' "$FTL_WORD" ../vendor-x/vendor 2>/dev/null | cut -d/ -f4 | sort -u); do
+    crates="$(grep -rlIE --include='*.ftl' "$FTL_WORD" ../vendor-x/vendor 2>/dev/null | cut -d/ -f4 | sort -u)"
+    for crate in $crates; do
         rename_ftl "../vendor-x/vendor/$crate"
         sed -i -E 's/"files":\{[^}]*\}/"files":{}/' "../vendor-x/vendor/$crate/.cargo-checksum.json"
         echo "desktop/build.sh: renamed in vendored crate $crate"
     done
     echo "desktop/build.sh: COSMIC left in vendored ftl: $(rename_left ../vendor-x/vendor)"
-    tar -C ../vendor-x -pcf vendor.tar .cargo vendor
+    # OCHNA-D8: repack with the same top-level entries the justfile packed (some have no .cargo)
+    if [ -n "$crates" ]; then
+        (cd ../vendor-x && tar -pcf ../src/vendor.tar $(ls -A))
+    fi
     rm -rf ../vendor-x
 fi
 dpkg-buildpackage -b -uc -us >/dev/null || die "dpkg-buildpackage $NAME"
