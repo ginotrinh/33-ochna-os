@@ -11,7 +11,7 @@
 7. ✅ **XONG 2026-11-28 (Lucina):** `base/build.sh` không `sudo` ở máy anh exit 0, 1:51.85; SPEC giai đoạn 2 đạt 6/6 ~~**Kiểm tiêu chí 1 giai đoạn 2 ở máy anh**~~
 8. ✅ **XONG 2026-11-28 (Lucina):** 4a đạt 4/4 (`base/update-test.sh` 6 PASS, `base/vm-test.sh` 10 PASS) ~~**Làm 4a (kernel vào ESP)**~~
 9. ⏳ **Làm giai đoạn 3 vòng 1, desktop ochna-aero** — SPEC duyệt 2026-11-28; thư mục `desktop/` có `LICENSE` GPL-3.0 riêng (anh duyệt); bắt đầu bằng build COSMIC từ mã `github.com/pop-os` trên CI.
-   - 2026-11-28: 24 thành phần COSMIC build đạt; image có desktop (448 gói, 2.5 GB) boot tới màn đăng nhập COSMIC mặc định (ảnh `build/greeter.png`, `OCHNA-D5`). Bước sau: kiểm vì sao thiếu `/etc/default/locale`, tạo user thử để đăng nhập vào desktop, rồi theme ochna-aero lớp 1 (cấu hình mặc định ở `/usr/share/cosmic`).
+   - 2026-11-28: 24 thành phần COSMIC build đạt; image có desktop boot tới greeter, user thử đăng nhập vào desktop (panel, dock, applet chạy; `desktop/login-test.sh`, ảnh `build/desktop-first.png`). Bước sau: theme ochna-aero lớp 1 (cấu hình mặc định ở `/usr/share/cosmic`, hình nền), rồi tiêu chí 1 (không còn chữ COSMIC). Còn mở: `pam_env` báo "Unable to open env file: /etc/default/locale" 3 lần mỗi lần boot dù file có trong image (root 0644, `LANG=C.UTF-8`), chưa rõ nguyên nhân.
 
 ## Tồn đọng (backlog)
 
