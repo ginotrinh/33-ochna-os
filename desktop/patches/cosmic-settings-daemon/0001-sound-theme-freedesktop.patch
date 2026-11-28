@@ -1,0 +1,13 @@
+OCHNA-D4: freedesktop sound theme instead of pop-sound-theme
+
+--- a/debian/control
++++ b/debian/control
+@@ -23,7 +23,7 @@
+ Depends:
+   acpid,
+   adw-gtk3,
+-  pop-sound-theme,
++  sound-theme-freedesktop,
+   pulseaudio-utils,
+   ${misc:Depends},
+   ${shlibs:Depends}

@@ -1,0 +1,12 @@
+OCHNA-D4: drop pop-fonts, ochna-aero ships its own fonts
+
+--- a/debian/control
++++ b/debian/control
+@@ -37,7 +37,6 @@
+   fonts-open-sans,
+   gnome-keyring,
+   libsecret-1-0,
+-  pop-fonts,
+   switcheroo-control,
+   xdg-desktop-portal-cosmic,
+   xwayland,

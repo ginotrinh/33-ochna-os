@@ -22,3 +22,4 @@ cosmic-randr f1a97655c97e8799bf4a37a8f5103a8ab5e5068d
 cosmic-idle 6d6f07af60bb307882cdcbd0bda0a6fc76bd0df3
 cosmic-wallpapers da595bba495cb8fc57f26505621fc25000218349
 adw-gtk3 213b5edad14afcf35b1c1c0bda41c6865dcc38b4
+cosmic-osk 6b146a2b0a23d88ae84223ad06c6813bda5a9386
