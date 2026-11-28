@@ -58,7 +58,7 @@ Duyệt: giai đoạn 1, 2026-11-27; giai đoạn 2, 2026-11-28 (sửa: thêm d�
 
 **Done when:**
 - [ ] 1. Image nền cộng desktop boot trong máy ảo vào màn đăng nhập ochna-aero, đăng nhập vào desktop; không chỗ nào người dùng thấy chữ COSMIC.
-- [ ] 2. Theme mặc định khớp token gino-style (bảng đối chiếu màu, bo góc, font kèm ảnh chụp); anh duyệt bằng mắt.
+- [x] 2. Theme mặc định khớp token gino-style (bảng đối chiếu màu, bo góc, font kèm ảnh chụp); anh duyệt bằng mắt. — bằng chứng: `desktop/theme/ochna-aero/theme.ron` (accent #1559a8, bg #dcebf8, radius_m 20, radius_l 26, Roboto Condensed); máy ảo `build/desktop-app.png`, `build/greeter-user.png`; anh duyệt ảnh 2026-11-28.
 - [ ] 3. Nút cửa sổ bên trái, tròn, đúng màu ở một app COSMIC và một app GTK.
 - [ ] 4. Dock ở dưới, có đèn sáng dưới app đang chạy.
 - [ ] 5. Kính mờ hiện sau panel, dock và ít nhất một cửa sổ.
