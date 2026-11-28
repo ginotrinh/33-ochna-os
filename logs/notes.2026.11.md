@@ -124,3 +124,10 @@ Tra bằng `gh search repos` (`bindeb-pkg`, `kernel build actions deb`, `custom 
 ## 2026-11-28 · OCHNA-K12 · lịch tuần
 
 - Anh duyệt bật lại lịch sau lần chạy tay đạt (`46082094150`). Lần chạy theo lịch đầu tiên: thứ Hai 2026-11-30 02:00 UTC; 6.18.65 đã có trong `kernel/status` nên nếu chưa có bản vá mới thì chỉ ghi ngày kiểm.
+
+## 2026-11-28 · SPEC giai đoạn 2 (chờ duyệt) · `docs/SPEC.md`
+
+- Anh chốt theo đề xuất: `mmdebstrap` 1.5.7 (không cần root, nhanh hơn `debootstrap`, sau này chạy được trên CI), `systemd-boot` 259.9 (gọn, ít cấu hình; GRUB bị loại vì nền tối giản), NetworkManager (desktop và Wi-Fi P50 ở giai đoạn 3 cần), chỉ console.
+- Tiêu chí 4 (không có kernel Ubuntu): `apt` có thể kéo `linux-image-generic` qua gói meta; nền phải chặn để kernel OchnaOS không bị thay.
+- Tiêu chí 5 (NVIDIA): gói headers giai đoạn 1 đã khai `Depends` (`OCHNA-K10`), image tối giản là phép thử thật cho việc đó.
+- Dựng image trên CI để sang giai đoạn 4, cùng đợt đóng gói.

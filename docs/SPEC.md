@@ -7,7 +7,7 @@ Duyệt: giai đoạn 1, 2026-11-27.
 | Lớp | Cách làm | Giai đoạn |
 |---|---|---|
 | Kernel | kernel.org LTS, đóng gói `.deb` | 1 |
-| Nền | Ubuntu 26.04 tối giản bằng `debootstrap`, cập nhật qua `apt` | 2 |
+| Nền | Ubuntu 26.04 tối giản bằng `mmdebstrap`, cập nhật qua `apt` | 2 |
 | Desktop | anh tự thiết kế | 3 |
 | Đóng gói | ISO hoặc image, trình cài, kho `apt` có ký | 4 |
 
@@ -28,8 +28,24 @@ Duyệt: giai đoạn 1, 2026-11-27.
 
 **Ngoài phạm vi:** nền, desktop, ISO, cài lên P50, ký Secure Boot.
 
+## Giai đoạn 2: nền
+
+**Cái gì:**
+1. `base/`: danh sách gói, cấu hình hệ thống, script dựng một lệnh ra image đĩa UEFI từ kho Ubuntu 26.04 bằng `mmdebstrap`, không cần `sudo`.
+2. Image gồm: kernel OchnaOS từ GitHub Releases, `systemd-boot`, systemd, `apt`, NetworkManager, `openssh-server`, `sudo`, firmware Wi-Fi Intel, microcode Intel. Chỉ console.
+3. Script thử: boot image trong máy ảo UEFI ở máy anh, kiểm các tiêu chí dưới.
+
+**Done when:**
+- [ ] 1. Một lệnh ở máy anh dựng ra image đĩa từ danh sách gói trong repo, không cần `sudo`; ghi thời gian dựng và kích thước image.
+- [ ] 2. Máy ảo UEFI boot image qua `systemd-boot` vào kernel OchnaOS; `uname -r` ra bản OchnaOS; đăng nhập console được.
+- [ ] 3. NetworkManager có địa chỉ và ra internet; `ssh` vào được; ổ đĩa ghi đọc được.
+- [ ] 4. `apt update` và `apt upgrade` chạy được; image không có gói kernel của Ubuntu, `apt upgrade` không cài kernel Ubuntu.
+- [ ] 5. `nvidia-dkms-580` cài được trong image và build module cho kernel OchnaOS.
+- [ ] 6. Repo và image không có mật khẩu hay khoá viết cứng; tài khoản và khoá dùng để thử tạo lúc chạy script thử.
+
+**Ngoài phạm vi:** desktop, trình cài, cài lên P50, ISO live, ký Secure Boot, kho `apt` có ký, dựng image trên CI.
+
 ## Các giai đoạn sau (phác thảo)
 
-- **2, nền:** `debootstrap` Ubuntu 26.04 tối giản, danh sách gói trong repo, cài kernel OchnaOS.
 - **3, desktop:** anh thiết kế; mang sang từ `32-ochna-os` phần phù hợp.
 - **4, đóng gói:** ISO hoặc image, trình cài, kho `apt` có ký, lệnh cập nhật.
