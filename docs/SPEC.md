@@ -19,12 +19,12 @@ Duyệt: giai đoạn 1, 2026-11-27.
 3. CI chỉ build; kiểm trong máy ảo làm ở máy anh.
 
 **Done when:**
-- [ ] 1. Một lệnh build ra `linux-image` và `linux-headers` OchnaOS từ bản kernel ghi trong repo, ở máy anh và trên CI.
+- [x] 1. Một lệnh build ra `linux-image` và `linux-headers` OchnaOS từ bản kernel ghi trong repo, ở máy anh và trên CI. — bằng chứng: máy anh `kernel/build.sh` exit 0 (2026-11-28, 1:46:13); CI run `46082094150` job build đạt (1:25:47).
 - [x] 2. Máy ảo Ubuntu 26.04 cài gói đó khởi động được; `uname -r` ra bản OchnaOS; mạng và ổ đĩa chạy. — bằng chứng: `kernel/vm-test.sh` 2026-11-27, 4 PASS (`uname -r` 6.18.65-ochna, https kernel.org, ghi đọc 256 MiB, `CONFIG_RUST=y`), exit 0.
-- [ ] 3. Driver NVIDIA nhánh 580 build được với kernel đó trên CI; build hỏng thì không phát hành.
+- [x] 3. Driver NVIDIA nhánh 580 build được với kernel đó trên CI; build hỏng thì không phát hành. — bằng chứng: run `46082094150` job nvidia đạt (`nvidia.ko` build với `6.18.65-ochna`); run `46069444033` nvidia hỏng thì job release bị bỏ qua.
 - [ ] 4. Workflow chạy mỗi tuần và chạy tay, mỗi lần dưới 6 giờ, log ghi bản kernel và kết quả; tuần không có bản vá mới thì cập nhật file trạng thái (bản kernel đã kiểm, ngày kiểm).
-- [ ] 5. Gói đạt được phát hành lên GitHub Releases, tên release có bản kernel, kèm file checksum.
-- [ ] 6. `git ls-files` không có file bản quyền riêng, bí mật, file build ra.
+- [x] 5. Gói đạt được phát hành lên GitHub Releases, tên release có bản kernel, kèm file checksum. — bằng chứng: Release `v6.18.65-ochna` (2026-11-28) có `linux-image`, `linux-headers`, `SHA256SUMS`.
+- [x] 6. `git ls-files` không có file bản quyền riêng, bí mật, file build ra. — bằng chứng: `git ls-files` 17 file, 396 KB, không file build, bí mật hay bản quyền riêng (2026-11-28).
 
 **Ngoài phạm vi:** nền, desktop, ISO, cài lên P50, ký Secure Boot.
 

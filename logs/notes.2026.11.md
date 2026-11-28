@@ -116,3 +116,7 @@ Tra bằng `gh search repos` (`bindeb-pkg`, `kernel build actions deb`, `custom 
 
 - Run `46069444033`: build 2:00:04, `nvidia` hỏng vì `objtool` trong gói headers báo `libelf.so.1: cannot open shared object file`. Gói `linux-headers` do `bindeb-pkg` sinh không khai `Depends` (`scripts/package/mkdebian` 6.18.65), mà `objtool`, `sign-file` và vài công cụ khác liên kết động tới `libelf.so.1`, `libcrypto.so.3`, `libz.so.1`, `libgcc_s.so.1`, `libc.so.6` (đọc bằng `readelf -d`). Máy ảo cloud image có sẵn các thư viện đó nên build đạt; container tối giản và nền `debootstrap` tối giản thì không.
 - Sửa: `build.sh` thêm `Depends: libc6, libelf1t64, libssl3t64, zlib1g, libgcc-s1` vào gói headers trước khi build (sửa `mkdebian` trong cây mã đã giải nén, có kiểm chỗ neo). Phương án bị loại: cài `libelf1t64` riêng trong bước test CI (che lỗi, nền tối giản vẫn dính).
+
+## 2026-11-28 · run `46082094150`
+
+- Cả 4 job đạt: build 1:25:47, đỉnh `/` 56947 MiB; nvidia build ra `nvidia.ko`; Release `v6.18.65-ochna` có 3 file; bot commit `kernel/status` (`e38a638`). Thời gian build trên runner dao động 1:25 tới 2:00 qua 3 lần chạy.
