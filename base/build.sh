@@ -52,6 +52,17 @@ log "kernel $KREL"
 
 # OCHNA-B1: root filesystem as a tar, built in a user namespace
 PKGS="$(grep -vE '^\s*(#|$)' "$HERE/packages.txt" | paste -sd, -)"
+# OCHNA-D3: DESKTOP_DIR=<dir of desktop .deb files> adds the ochna-aero desktop to the image
+DESKTOP_HOOKS=()
+if [ -n "${DESKTOP_DIR:-}" ]; then
+    ls "$DESKTOP_DIR"/*.deb >/dev/null || die "no .deb in $DESKTOP_DIR"
+    DESKTOP_HOOKS=(
+        --customize-hook="mkdir -p \"\$1/tmp/desktop\""
+        --customize-hook="copy-in $(echo "$DESKTOP_DIR"/*.deb) /tmp/desktop"
+        --customize-hook='chroot "$1" sh -c "DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends /tmp/desktop/*.deb && rm -rf /tmp/desktop"'
+    )
+    ROOT_SIZE="${ROOT_SIZE_DESKTOP:-12G}"
+fi
 mmdebstrap --mode="${MMDEBSTRAP_MODE:-unshare}" --variant=apt --format=tar \
     --include="$PKGS" \
     --aptopt='APT::Install-Recommends "false"' \
@@ -59,6 +70,7 @@ mmdebstrap --mode="${MMDEBSTRAP_MODE:-unshare}" --variant=apt --format=tar \
     --setup-hook="copy-in $HERE/rootfs/etc/apt/preferences.d/ochna-kernel /etc/apt/preferences.d" \
     --customize-hook="copy-in $IMAGE_DEB $HEADERS_DEB /tmp" \
     --customize-hook='chroot "$1" sh -c "DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends /tmp/linux-*.deb && rm -f /tmp/linux-*.deb"' \
+    "${DESKTOP_HOOKS[@]}" \
     --customize-hook="sync-in $HERE/rootfs /" \
     --customize-hook='mkdir -p "$1/boot/efi"' \
     --customize-hook='chroot "$1" systemctl enable ochna-ssh-hostkeys.service NetworkManager.service ssh.socket' \

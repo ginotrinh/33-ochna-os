@@ -8,6 +8,10 @@ on:
         description: "Run ID of a kernel workflow run whose kernel-debs artifact to use (empty = latest Release)"
         required: false
         default: ""
+      desktop_run:
+        description: "Run ID of a desktop workflow run whose desktop-* artifacts to install (empty = console only)"
+        required: false
+        default: ""
 
 permissions:
   contents: read
@@ -27,6 +31,15 @@ jobs:
           path: kdebs
           run-id: ${{ inputs.kernel_run }}
           github-token: ${{ github.token }}
+      # OCHNA-D3: desktop packages from a desktop workflow run
+      - if: inputs.desktop_run != ''
+        uses: actions/download-artifact@v4
+        with:
+          pattern: desktop-*
+          merge-multiple: true
+          path: ddebs
+          run-id: ${{ inputs.desktop_run }}
+          github-token: ${{ github.token }}
       - name: build in ubuntu:26.04
         run: |
           docker run --rm --privileged -v "$PWD:/w" -w /w ubuntu:26.04 bash -c '
@@ -36,6 +49,7 @@ jobs:
             apt-get install -y -qq --no-install-recommends \
               mmdebstrap e2fsprogs libarchive13t64 dosfstools mtools fdisk qemu-utils curl ca-certificates >/dev/null
             if [ -d kdebs ]; then export KERNEL_DIR=/w/kdebs; fi
+            if [ -d ddebs ]; then export DESKTOP_DIR=/w/ddebs; fi
             MMDEBSTRAP_MODE=root base/build.sh
             chown -R '"$(id -u):$(id -g)"' out
           '
