@@ -9,7 +9,8 @@
 5. ✅ **XONG 2026-11-28 (Lucina):** anh duyệt SPEC giai đoạn 2, sửa cùng ngày thêm dựng image trên CI ~~**Anh duyệt SPEC giai đoạn 2 (nền)**~~
 6. ✅ **XONG 2026-11-28 (Lucina):** run `46117066579`, `base/vm-test.sh` 10 PASS, dmesg 0 lỗi; tiêu chí 2 tới 6 đạt ~~**Dựng image nền trên CI rồi thử trong VM ở máy anh**~~
 7. ⏳ **Kiểm tiêu chí 1 giai đoạn 2 ở máy anh** — chờ anh cài `mmdebstrap` (`sudo apt-get install -y mmdebstrap arch-test`), rồi chạy `base/build.sh` không `sudo`.
-8. ⏳ **Làm 4a (kernel vào ESP) rồi ochna-aero** — SPEC duyệt 2026-11-28; 4a trước: hook cài kernel, bản kernel thứ hai từ workflow `kernel` chạy tay để thử.
+8. ✅ **XONG 2026-11-28 (Lucina):** 4a đạt 4/4 (`base/update-test.sh` 6 PASS, `base/vm-test.sh` 10 PASS) ~~**Làm 4a (kernel vào ESP)**~~
+9. ⏳ **Làm giai đoạn 3 vòng 1, desktop ochna-aero** — SPEC duyệt 2026-11-28; thư mục `desktop/` có `LICENSE` GPL-3.0 riêng (anh duyệt); bắt đầu bằng build COSMIC từ mã `github.com/pop-os` trên CI.
 
 ## Tồn đọng (backlog)
 

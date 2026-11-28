@@ -170,3 +170,9 @@ Tra bằng `gh search repos` (`bindeb-pkg`, `kernel build actions deb`, `custom 
 - Anh duyệt SPEC giai đoạn 3 vòng 1 và 4a, bỏ phần xem trước cửa sổ của dock.
 - Gói System76: image nền hiện không có gói nào của System76 (toàn kho Ubuntu cộng kernel OchnaOS). Desktop sẽ dựa trên mã COSMIC ở `github.com/pop-os` (cosmic-comp, cosmic-panel, cosmic-settings, cosmic-greeter, cosmic-session, libcosmic và các app), Ubuntu 26.04 không có trong kho; mình tự build từ mã nguồn như vòng 3 đã build 8 gói. Phụ thuộc còn lại: mã nguồn và nhịp phát hành của System76, không phụ thuộc kho `apt` của họ.
 - Giấy phép: phần lớn mã COSMIC là GPL-3.0; bản vá cho mã đó phải theo GPL-3.0, khác GPL-2.0 của repo; cần anh chốt cách ghi license cho thư mục desktop.
+
+## 2026-11-28 · OCHNA-U2 tới U4 · giai đoạn 4a
+
+- `esp-sync` đồng bộ theo trạng thái (không theo sự kiện): đọc kernel đang có trong `/boot`, giữ 3 bản mới nhất trên ESP, mặc định bản số cao nhất (`sort -V`). Chọn cách này để ba hook (cài, gỡ, dựng lại initrd) cùng gọi một lệnh, chạy lại bao nhiêu lần cũng ra cùng kết quả. Bỏ qua khi `/boot/efi` chưa mount (lúc dựng image trong chroot).
+- Thử: kernel 6.18.64 build trên CI với `publish=false` (không Release, không đổi `kernel/status`), image dựng bằng kernel đó (`kernel_run`), rồi cập nhật lên 6.18.65 qua `apt`. 6 PASS. Mỗi bản chiếm 78 MiB trên ESP 512 MiB khi chưa cài NVIDIA; initrd có thể lớn hơn khi có thêm module, chưa đo.
+- Anh duyệt: thư mục `desktop/` dùng `LICENSE` GPL-3.0 riêng (bản vá cho mã COSMIC GPL-3.0).

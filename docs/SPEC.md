@@ -74,10 +74,10 @@ Duyệt: giai đoạn 1, 2026-11-27; giai đoạn 2, 2026-11-28 (sửa: thêm d�
 2. Giữ bản cũ để chọn ở menu boot khi bản mới hỏng; gỡ gói thì mục và file trên ESP được xoá.
 
 **Done when:**
-- [ ] 1. Trong máy ảo chạy image nền: cài một bản kernel OchnaOS khác bằng `apt`, khởi động lại thì vào bản mới.
-- [ ] 2. Menu boot còn bản cũ, chọn bản cũ thì boot được.
-- [ ] 3. Gỡ gói một bản thì mục boot và file của bản đó trên ESP mất; ESP không đầy sau 3 lần cập nhật liên tiếp.
-- [ ] 4. Image nền dựng mới vẫn qua `base/vm-test.sh`.
+- [x] 1. Trong máy ảo chạy image nền: cài một bản kernel OchnaOS khác bằng `apt`, khởi động lại thì vào bản mới. — bằng chứng: `base/update-test.sh 6.18.65` 2026-11-28 trên image chạy 6.18.64 (base run `46135786570`, kernel thử run `46128860981`): `apt` cài 6.18.65, ESP có 2 mục, mặc định 6.18.65, khởi động lại vào 6.18.65.
+- [x] 2. Menu boot còn bản cũ, chọn bản cũ thì boot được. — bằng chứng: cùng lần thử: `systemctl reboot --boot-loader-entry=ochna-6.18.64-ochna.conf` vào 6.18.64; khởi động lại thường về 6.18.65.
+- [x] 3. Gỡ gói một bản thì mục boot và file của bản đó trên ESP mất; ESP không đầy sau 3 lần cập nhật liên tiếp. — bằng chứng: cùng lần thử: gỡ gói 6.18.64 thì mục và thư mục của nó trên ESP mất; ESP 78 MiB / 511 MiB với một bản, mỗi bản 78 MiB, `esp-sync` giữ tối đa 3 bản (234 MiB).
+- [x] 4. Image nền dựng mới vẫn qua `base/vm-test.sh`. — bằng chứng: base run `46136850053` (ESP theo layout mới) + `base/vm-test.sh`: 10 PASS, dmesg 0 lỗi.
 
 **Ngoài phạm vi:** kho `apt` có ký (4b), lệnh `ochna-update`, Secure Boot.
 
