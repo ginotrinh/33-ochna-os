@@ -20,7 +20,7 @@ jobs:
             export DEBIAN_FRONTEND=noninteractive
             apt-get update -qq
             apt-get install -y -qq --no-install-recommends \
-              mmdebstrap e2fsprogs dosfstools mtools fdisk qemu-utils curl ca-certificates python3 >/dev/null
+              mmdebstrap e2fsprogs libarchive13t64 dosfstools mtools fdisk qemu-utils curl ca-certificates >/dev/null
             MMDEBSTRAP_MODE=root base/build.sh
             chown -R '"$(id -u):$(id -g)"' out
           '

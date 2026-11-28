@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # OCHNA-B1: build the OchnaOS base disk image (UEFI, GPT, systemd-boot) without root.
 # Usage: base/build.sh   (KERNEL_DIR=out: local kernel debs; MMDEBSTRAP_MODE=root: CI container as root)
-# Needs: mmdebstrap (unshare mode), mkfs.ext4 >= 1.47.1, mkfs.vfat, mtools, sfdisk, qemu-img, curl
+# Needs: mmdebstrap (unshare mode), mkfs.ext4 >= 1.47.1 with libarchive13t64, mkfs.vfat, mtools, sfdisk, qemu-img, curl
 # Output: out/ochna-base.qcow2, out/ochna-base.txt (kernel, sizes, build time)
 # Exit: 0 built | 1 build or check failure | 2 missing tool
 set -euo pipefail

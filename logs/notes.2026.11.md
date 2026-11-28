@@ -147,3 +147,4 @@ Tra bằng `gh search repos` (`bindeb-pkg`, `kernel build actions deb`, `custom 
 ## 2026-11-28 · OCHNA-B4 · `base/build.sh`
 
 - Run `46110726244` hỏng sau 23 giây: `api.github.com` trả 403 cho runner (gọi không token; em đoán do giới hạn lượt gọi dùng chung theo IP runner, chưa kiểm). Sửa: lấy bản kernel từ `kernel/status`, tải thẳng `SHA256SUMS` và các file nó liệt kê từ `releases/download/v<bản>-ochna/`; không cần API, bản tải luôn khớp bản CI đã phát hành. Đã thử đoạn tải ở máy anh: 2 file khớp sha256.
+- Run `46110857840`: rootfs dựng xong trong 54.5 giây (`mmdebstrap` root mode), 3 bước kiểm khoá và mật khẩu đạt; `mkfs.ext4 -d <tar>` hỏng "you need libarchive to be able to process tarballs": `mke2fs` nạp `libarchive` lúc chạy (dlopen), gói `e2fsprogs` không kéo nó theo. Sửa: thêm `libarchive13t64` vào workflow, ghi vào dòng Needs của `build.sh`.
