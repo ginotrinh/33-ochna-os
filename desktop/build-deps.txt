@@ -1,0 +1,2 @@
+# OCHNA-D2: build dependencies that are themselves components (name dep...)
+cosmic-osd cosmic-randr

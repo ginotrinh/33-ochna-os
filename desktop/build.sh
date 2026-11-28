@@ -10,6 +10,8 @@ HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT="$(cd "$HERE/.." && pwd)"
 NAME="${1:?usage: desktop/build.sh <component>}"
 SHA="$(awk -v n="$NAME" '$1==n {print $2}' "$HERE/components.txt")"
+GH_REPO="$(awk -v n="$NAME" '$1==n {print $3}' "$HERE/components.txt")"
+GH_REPO="${GH_REPO:-pop-os/$NAME}"
 [ -n "$SHA" ] || { echo "desktop/build.sh: $NAME not in components.txt" >&2; exit 2; }
 WORK="$ROOT/build/desktop/$NAME"
 OUT="$ROOT/out/desktop/$NAME"
@@ -22,7 +24,7 @@ cd "$WORK"
 
 # OCHNA-D1: source at the pinned commit
 git init -q src
-git -C src remote add origin "https://github.com/pop-os/$NAME"
+git -C src remote add origin "https://github.com/$GH_REPO"
 git -C src fetch -q --depth 1 origin "$SHA" || die "fetch $NAME $SHA"
 git -C src checkout -q FETCH_HEAD
 [ -d src/debian ] || die "$NAME has no debian/ directory"
@@ -36,8 +38,17 @@ if [ -d "$HERE/patches/$NAME" ]; then
     done
 fi
 
+# OCHNA-D2: components this one build-depends on are built first in the same job and installed
+for dep in $(awk -v n="$NAME" '$1==n {for (i = 2; i <= NF; i++) print $i}' "$HERE/build-deps.txt"); do
+    [ -d "$ROOT/out/desktop/$dep" ] || "$HERE/build.sh" "$dep"
+    apt-get install -y -qq "$ROOT/out/desktop/$dep"/*.deb >/dev/null
+done
+
 # OCHNA-D1: build dependencies from debian/control, vendored Rust crates, then the packages
 cd src
+# OCHNA-D2: some justfiles read SOURCE_DATE_EPOCH; use the commit time for reproducible builds
+SOURCE_DATE_EPOCH="$(git log -1 --format=%ct)"
+export SOURCE_DATE_EPOCH
 apt-get build-dep -y -qq . >/dev/null
 if [ -f justfile ] && grep -qE '^vendor' justfile; then
     just vendor >/dev/null
