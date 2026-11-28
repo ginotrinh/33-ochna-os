@@ -12,6 +12,7 @@ network-manager
 wpasupplicant
 openssh-server
 sudo
+login
 iproute2
 iputils-ping
 curl

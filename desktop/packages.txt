@@ -1,0 +1,3 @@
+# OCHNA-D5: Ubuntu packages the desktop needs on top of base/packages.txt, one per line
+libpam-gnome-keyring
+gnome-keyring

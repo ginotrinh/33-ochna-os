@@ -56,10 +56,11 @@ PKGS="$(grep -vE '^\s*(#|$)' "$HERE/packages.txt" | paste -sd, -)"
 DESKTOP_HOOKS=()
 if [ -n "${DESKTOP_DIR:-}" ]; then
     ls "$DESKTOP_DIR"/*.deb >/dev/null || die "no .deb in $DESKTOP_DIR"
+    DESKTOP_PKGS="$(grep -vE '^\s*(#|$)' "$ROOT/desktop/packages.txt" | xargs)"
     DESKTOP_HOOKS=(
         --customize-hook="mkdir -p \"\$1/tmp/desktop\""
         --customize-hook="copy-in $(echo "$DESKTOP_DIR"/*.deb) /tmp/desktop"
-        --customize-hook='chroot "$1" sh -c "DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends /tmp/desktop/*.deb && rm -rf /tmp/desktop"'
+        --customize-hook="chroot \"\$1\" sh -c 'DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends /tmp/desktop/*.deb $DESKTOP_PKGS && rm -rf /tmp/desktop'"
     )
     ROOT_SIZE="${ROOT_SIZE_DESKTOP:-12G}"
 fi
