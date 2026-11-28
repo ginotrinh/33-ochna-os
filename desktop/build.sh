@@ -73,7 +73,7 @@ fi
 if [ -f vendor.tar ]; then
     mkdir ../vendor-x
     tar -C ../vendor-x -pxf vendor.tar
-    crates="$(grep -rlIE --include='*.ftl' "$FTL_WORD" ../vendor-x/vendor 2>/dev/null | cut -d/ -f4 | sort -u)"
+    crates="$(grep -rlIE --include='*.ftl' "$FTL_WORD" ../vendor-x/vendor 2>/dev/null | cut -d/ -f4 | sort -u || true)"
     for crate in $crates; do
         rename_ftl "../vendor-x/vendor/$crate"
         sed -i -E 's/"files":\{[^}]*\}/"files":{}/' "../vendor-x/vendor/$crate/.cargo-checksum.json"
