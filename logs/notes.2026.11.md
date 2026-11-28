@@ -159,3 +159,11 @@ Tra bằng `gh search repos` (`bindeb-pkg`, `kernel build actions deb`, `custom 
 - Anh muốn desktop kiểu Windows 7 glass liquid theo `gino-style.css` (token Aero: nền xanh có vệt màu, kính `blur(22px) saturate(185%)`, bóng giọt nước, viền sáng, nút kính, bo 26/20px, Roboto Condensed + Lora, sáng và tối).
 - Blur cần compositor: cosmic-comp mới có bản nháp `ext-background-effect-v1` (PR 2179, tháng 3/2026, chưa thấy merge); niri 26.04 đã có blur qua cùng giao thức; GNOME 51 Mutter và Plasma 6.7 cũng có (tra web 2026-11-28, nguồn tin thứ cấp).
 - Đường cập nhật kernel: kernel.org là nguồn phụ thuộc duy nhất của kernel; CI, Release, cài gói, DKMS do mình giữ; còn thiếu chép vào ESP (4a) và kho `apt` (4b, anh để sau 4a).
+
+## 2026-11-28 · SPEC giai đoạn 3 vòng 1 và 4a (chờ duyệt văn bản)
+
+- Anh chốt: COSMIC nhưng tên hiển thị `ochna-aero`; nút cửa sổ bên trái, tròn, màu ochna-aero; dock kiểu macOS, màu và hành vi Windows 7; icon kiểu Windows, đổi được; mặc định sáng như gino-style; theme dạng module, đặt icon hay wallpaper đúng chỗ thì hiện danh sách chọn. Duyệt hướng 4a.
+- Em hiểu "hành vi Windows 7" của dock là đèn sáng app đang chạy và xem trước cửa sổ khi rê chuột; anh sửa nếu khác.
+- Đổi tên chỉ ở chữ người dùng thấy; đổi tên crate và gói upstream sẽ tách khỏi bản vá của System76, mỗi lần cập nhật phải gộp tay.
+- Rủi ro đã biết: nút bên trái cho app GTK là chỗ vòng 3 (`32-ochna-os`) chưa giải được (`cosmic-settings-daemon` ghi `button-layout` mỗi lần đăng nhập, bản vá đã soạn chưa build). Kính mờ phụ thuộc bản nháp `ext-background-effect-v1` của cosmic-comp.
+- 4a cần bản kernel thứ hai để thử: chạy tay workflow `kernel` với `version` là bản 6.18.y khác.

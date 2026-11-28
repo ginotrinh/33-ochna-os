@@ -9,8 +9,7 @@
 5. ✅ **XONG 2026-11-28 (Lucina):** anh duyệt SPEC giai đoạn 2, sửa cùng ngày thêm dựng image trên CI ~~**Anh duyệt SPEC giai đoạn 2 (nền)**~~
 6. ✅ **XONG 2026-11-28 (Lucina):** run `46117066579`, `base/vm-test.sh` 10 PASS, dmesg 0 lỗi; tiêu chí 2 tới 6 đạt ~~**Dựng image nền trên CI rồi thử trong VM ở máy anh**~~
 7. ⏳ **Kiểm tiêu chí 1 giai đoạn 2 ở máy anh** — chờ anh cài `mmdebstrap` (`sudo apt-get install -y mmdebstrap arch-test`), rồi chạy `base/build.sh` không `sudo`.
-8. ⏳ **Anh trả lời 4 câu desktop rồi em viết SPEC giai đoạn 3** — hướng Windows 7 glass liquid theo `0-gaos/apps/assets/gino-style.css`; câu hỏi: (1) compositor COSMIC (blur còn bản nháp cosmic-comp PR 2179) hay niri (blur từ 26.04, kiểu tiling cuộn), em nghiêng COSMIC kèm tự đóng gói bản vá blur; (2) nút cửa sổ bên phải; (3) thanh tác vụ dưới, nút Start, app ghim; (4) mặc định sáng hay tối, giữ icon WhiteSur hay đổi.
-9. ⏳ **Anh duyệt làm việc 4a: chép kernel vào ESP khi cài bằng `apt`, giữ bản cũ để lùi** — em viết SPEC trước; kho `apt` có ký (4b) để sau khi xong 4a.
+8. ⏳ **Anh duyệt SPEC giai đoạn 3 vòng 1 (ochna-aero) và 4a** — `docs/SPEC.md`; anh đã trả lời 6 điểm hướng desktop và duyệt hướng 4a 2026-11-28; duyệt văn bản SPEC thì thêm dòng `Duyệt:`.
 
 ## Tồn đọng (backlog)
 
