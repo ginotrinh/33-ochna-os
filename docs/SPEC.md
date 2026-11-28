@@ -37,7 +37,7 @@ Duyệt: giai đoạn 1, 2026-11-27; giai đoạn 2, 2026-11-28 (sửa: thêm d�
 4. Workflow chạy tay `base` trên GitHub Actions dựng image và tải lên artifact, để thử khi máy anh chưa có `mmdebstrap`.
 
 **Done when:**
-- [ ] 1. Một lệnh ở máy anh dựng ra image đĩa từ danh sách gói trong repo, không cần `sudo`; ghi thời gian dựng và kích thước image.
+- [x] 1. Một lệnh ở máy anh dựng ra image đĩa từ danh sách gói trong repo, không cần `sudo`; ghi thời gian dựng và kích thước image. — bằng chứng: `base/build.sh` ở máy anh, user thường, không `sudo` (2026-11-28, `mmdebstrap` 1.5.7 chế độ `unshare`): exit 0, 1:51.85, qcow2 1.33 GB, 205 gói.
 - [x] 2. Máy ảo UEFI boot image qua `systemd-boot` vào kernel OchnaOS; `uname -r` ra bản OchnaOS; đăng nhập console được. — bằng chứng: `base/vm-test.sh` 2026-11-28, image từ run `46117066579`: `uname -r` 6.18.65-ochna, biến EFI `LoaderInfo` có (systemd-boot), serial hiện `ochna login:`, đăng nhập `ssh` root bằng khoá thử.
 - [x] 3. NetworkManager có địa chỉ và ra internet; `ssh` vào được; ổ đĩa ghi đọc được. — bằng chứng: cùng lần thử: `nmcli` báo `connected`, https kernel.org đạt, ghi đọc 256 MiB đạt.
 - [x] 4. `apt update` và `apt upgrade` chạy được; image không có gói kernel của Ubuntu, `apt upgrade` không cài kernel Ubuntu. — bằng chứng: cùng lần thử: `apt-get update` và `upgrade` đạt; chỉ có `linux-image-6.18.65-ochna`; `apt-get -s install linux-generic` bị từ chối.
