@@ -61,7 +61,7 @@ mmdebstrap --mode="${MMDEBSTRAP_MODE:-unshare}" --variant=apt --format=tar \
     --customize-hook='chroot "$1" sh -c "DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends /tmp/linux-*.deb && rm -f /tmp/linux-*.deb"' \
     --customize-hook="sync-in $HERE/rootfs /" \
     --customize-hook='mkdir -p "$1/boot/efi"' \
-    --customize-hook='chroot "$1" systemctl enable ochna-ssh-hostkeys.service NetworkManager.service' \
+    --customize-hook='chroot "$1" systemctl enable ochna-ssh-hostkeys.service NetworkManager.service ssh.socket' \
     --customize-hook='rm -f "$1"/etc/ssh/ssh_host_*' \
     --customize-hook="download /boot/vmlinuz-$KREL $WORK/vmlinuz" \
     --customize-hook="download /boot/initrd.img-$KREL $WORK/initrd.img" \
