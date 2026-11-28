@@ -15,6 +15,10 @@ on:
         description: "Build even if kernel/status already has this version"
         type: boolean
         default: false
+      publish:
+        description: "Publish a Release and update kernel/status (off = test build, artifact only)"
+        type: boolean
+        default: true
 
 permissions:
   contents: write
@@ -130,6 +134,8 @@ jobs:
 
   release:
     needs: [check, build, nvidia]
+    # OCHNA-U1: scheduled runs have no inputs and always publish
+    if: github.event_name == 'schedule' || inputs.publish
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
