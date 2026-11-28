@@ -1,6 +1,6 @@
 # SPEC OchnaOS
 
-Duyệt: giai đoạn 1, 2026-11-27; giai đoạn 2, 2026-11-28 (sửa: thêm dựng image trên CI, cùng ngày).
+Duyệt: giai đoạn 1, 2026-11-27; giai đoạn 2, 2026-11-28 (sửa: thêm dựng image trên CI, cùng ngày); giai đoạn 3 vòng 1 và 4a, 2026-11-28 (sửa: bỏ xem trước cửa sổ của dock).
 
 ## Kiến trúc
 
@@ -52,7 +52,7 @@ Duyệt: giai đoạn 1, 2026-11-27; giai đoạn 2, 2026-11-28 (sửa: thêm d�
 1. Desktop dựa trên COSMIC, tên hiển thị với người dùng là `ochna-aero` (màn đăng nhập, phiên, Settings, About); tên gói và mã nguồn upstream giữ nguyên.
 2. Theme mặc định sáng theo token của `0-gaos/apps/assets/gino-style.css`: nền xanh có vệt màu, kính mờ, bóng giọt nước, viền sáng, màu nhấn, bo góc, chữ Roboto Condensed và Lora.
 3. Nút cửa sổ bên trái, tròn, màu theo ochna-aero, cho cả app COSMIC lẫn app GTK.
-4. Dock ở dưới kiểu macOS; màu và hành vi kiểu Windows 7: đèn sáng dưới app đang chạy, rê chuột thì xem trước cửa sổ.
+4. Dock ở dưới kiểu macOS; màu và hành vi kiểu Windows 7: đèn sáng dưới app đang chạy.
 5. Kính mờ sau panel, dock và cửa sổ (bản vá blur của cosmic-comp, tự đóng gói).
 6. Module theme: một thư mục cho mỗi theme gồm màu, icon, wallpaper, con trỏ; đặt bộ icon hay wallpaper vào thư mục quy ước thì Settings liệt kê để chọn. Bộ icon mặc định kiểu Windows, giấy phép tự do.
 
@@ -60,7 +60,7 @@ Duyệt: giai đoạn 1, 2026-11-27; giai đoạn 2, 2026-11-28 (sửa: thêm d�
 - [ ] 1. Image nền cộng desktop boot trong máy ảo vào màn đăng nhập ochna-aero, đăng nhập vào desktop; không chỗ nào người dùng thấy chữ COSMIC.
 - [ ] 2. Theme mặc định khớp token gino-style (bảng đối chiếu màu, bo góc, font kèm ảnh chụp); anh duyệt bằng mắt.
 - [ ] 3. Nút cửa sổ bên trái, tròn, đúng màu ở một app COSMIC và một app GTK.
-- [ ] 4. Dock ở dưới, có đèn app đang chạy và xem trước cửa sổ khi rê chuột.
+- [ ] 4. Dock ở dưới, có đèn sáng dưới app đang chạy.
 - [ ] 5. Kính mờ hiện sau panel, dock và ít nhất một cửa sổ.
 - [ ] 6. Chép một bộ icon và một wallpaper mới vào thư mục quy ước thì chúng hiện trong danh sách chọn, chọn xong áp ngay; tài liệu ngắn trong repo chỉ chỗ đặt.
 - [ ] 7. Mọi file icon, wallpaper, font trong repo hay image có giấy phép tự do, ghi nguồn.

@@ -167,3 +167,6 @@ Tra bằng `gh search repos` (`bindeb-pkg`, `kernel build actions deb`, `custom 
 - Đổi tên chỉ ở chữ người dùng thấy; đổi tên crate và gói upstream sẽ tách khỏi bản vá của System76, mỗi lần cập nhật phải gộp tay.
 - Rủi ro đã biết: nút bên trái cho app GTK là chỗ vòng 3 (`32-ochna-os`) chưa giải được (`cosmic-settings-daemon` ghi `button-layout` mỗi lần đăng nhập, bản vá đã soạn chưa build). Kính mờ phụ thuộc bản nháp `ext-background-effect-v1` của cosmic-comp.
 - 4a cần bản kernel thứ hai để thử: chạy tay workflow `kernel` với `version` là bản 6.18.y khác.
+- Anh duyệt SPEC giai đoạn 3 vòng 1 và 4a, bỏ phần xem trước cửa sổ của dock.
+- Gói System76: image nền hiện không có gói nào của System76 (toàn kho Ubuntu cộng kernel OchnaOS). Desktop sẽ dựa trên mã COSMIC ở `github.com/pop-os` (cosmic-comp, cosmic-panel, cosmic-settings, cosmic-greeter, cosmic-session, libcosmic và các app), Ubuntu 26.04 không có trong kho; mình tự build từ mã nguồn như vòng 3 đã build 8 gói. Phụ thuộc còn lại: mã nguồn và nhịp phát hành của System76, không phụ thuộc kho `apt` của họ.
+- Giấy phép: phần lớn mã COSMIC là GPL-3.0; bản vá cho mã đó phải theo GPL-3.0, khác GPL-2.0 của repo; cần anh chốt cách ghi license cho thư mục desktop.

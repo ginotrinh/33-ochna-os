@@ -9,7 +9,7 @@
 5. ✅ **XONG 2026-11-28 (Lucina):** anh duyệt SPEC giai đoạn 2, sửa cùng ngày thêm dựng image trên CI ~~**Anh duyệt SPEC giai đoạn 2 (nền)**~~
 6. ✅ **XONG 2026-11-28 (Lucina):** run `46117066579`, `base/vm-test.sh` 10 PASS, dmesg 0 lỗi; tiêu chí 2 tới 6 đạt ~~**Dựng image nền trên CI rồi thử trong VM ở máy anh**~~
 7. ⏳ **Kiểm tiêu chí 1 giai đoạn 2 ở máy anh** — chờ anh cài `mmdebstrap` (`sudo apt-get install -y mmdebstrap arch-test`), rồi chạy `base/build.sh` không `sudo`.
-8. ⏳ **Anh duyệt SPEC giai đoạn 3 vòng 1 (ochna-aero) và 4a** — `docs/SPEC.md`; anh đã trả lời 6 điểm hướng desktop và duyệt hướng 4a 2026-11-28; duyệt văn bản SPEC thì thêm dòng `Duyệt:`.
+8. ⏳ **Làm 4a (kernel vào ESP) rồi ochna-aero** — SPEC duyệt 2026-11-28; 4a trước: hook cài kernel, bản kernel thứ hai từ workflow `kernel` chạy tay để thử.
 
 ## Tồn đọng (backlog)
 
