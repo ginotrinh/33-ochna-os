@@ -11,7 +11,7 @@
 7. ✅ **XONG 2026-11-28 (Lucina):** `base/build.sh` không `sudo` ở máy anh exit 0, 1:51.85; SPEC giai đoạn 2 đạt 6/6 ~~**Kiểm tiêu chí 1 giai đoạn 2 ở máy anh**~~
 8. ✅ **XONG 2026-11-28 (Lucina):** 4a đạt 4/4 (`base/update-test.sh` 6 PASS, `base/vm-test.sh` 10 PASS) ~~**Làm 4a (kernel vào ESP)**~~
 9. ⏳ **Làm giai đoạn 3 vòng 1, desktop ochna-aero** — SPEC duyệt 2026-11-28; thư mục `desktop/` có `LICENSE` GPL-3.0 riêng (anh duyệt); bắt đầu bằng build COSMIC từ mã `github.com/pop-os` trên CI.
-   - 2026-11-28: `desktop/` 22 thành phần ghim `epoch-1.11.0`, cả 22 build đạt trên CI (sau 3 lỗi cơ học: repo `pop-os/launcher`, build-dep `cosmic-randr`, biến `SOURCE_DATE_EPOCH` và `SOURCE_GIT_HASH`); run đủ bộ `46146485629`. Bước sau: workflow `base` nhận `desktop_run` để cài các gói desktop vào image, boot thử tới màn đăng nhập, rồi theme ochna-aero.
+   - 2026-11-28: 24 thành phần COSMIC build đạt; image có desktop (448 gói, 2.5 GB) boot tới màn đăng nhập COSMIC mặc định (ảnh `build/greeter.png`, `OCHNA-D5`). Bước sau: kiểm vì sao thiếu `/etc/default/locale`, tạo user thử để đăng nhập vào desktop, rồi theme ochna-aero lớp 1 (cấu hình mặc định ở `/usr/share/cosmic`).
 
 ## Tồn đọng (backlog)
 
