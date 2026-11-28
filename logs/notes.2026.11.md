@@ -211,3 +211,10 @@ Tra bằng `gh search repos` (`bindeb-pkg`, `kernel build actions deb`, `custom 
 - Màn đăng nhập của tài khoản chưa đăng nhập lần nào vẫn nền xám: greeter lấy hình nền theo state của user (`/etc/skel/.local/state/cosmic/...`, phát hiện ở vòng 3), chưa làm.
 - Dock còn vài icon bánh răng xám (app thiếu icon trong bộ `Cosmic`); thuộc tiêu chí 6 và 7 (bộ icon kiểu Windows).
 - CI: workflow `base` khi có `desktop_run` thì cài cargo trong container, chạy `desktop/theme/build.sh`, chép deb vào cùng thư mục gói desktop.
+
+## 2026-11-28 · OCHNA-D8 · tên ochna-aero thay COSMIC
+
+- Chữ COSMIC người dùng thấy nằm ở 3 chỗ: Name, Comment của file `.desktop` (gồm session `cosmic.desktop` mà greeter hiện), và file dịch `.ftl` nhúng vào binary lúc build (i18n-embed). Đổi bằng `sed` trên mã nguồn sau bước vá, trước khi build, mọi ngôn ngữ; không viết bản vá từng file vì cosmic-settings riêng đã đổi 80 file.
+- Giữ nguyên định danh: `DesktopNames`, `OnlyShowIn`, `Categories`, `X-COSMIC-*`, biến `COSMIC_*`. Đổi `DesktopNames` sẽ đổi `XDG_CURRENT_DESKTOP`, làm portal và mục `OnlyShowIn=COSMIC` hỏng.
+- Thử trên mã cosmic-session, cosmic-files, cosmic-settings ở commit ghim: còn lại 0 chỗ ngoài các khoá định danh trên.
+- Gói build lại vẫn version `1.11.0`; khi làm 4b cần thêm revision của OchnaOS để apt giao được.

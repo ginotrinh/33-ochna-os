@@ -38,6 +38,15 @@ if [ -d "$HERE/patches/$NAME" ]; then
     done
 fi
 
+# OCHNA-D8: user-visible name ochna-aero instead of COSMIC in translations and desktop entry names;
+# identifiers (DesktopNames, OnlyShowIn, Categories, X-COSMIC-*, COSMIC_*) stay
+WORD='(^|[^A-Za-z0-9_-])COSMIC([^A-Za-z0-9_-]|$)'
+find src -type f -name '*.ftl' -not -path '*/vendor/*' -print0 \
+    | xargs -0 -r sed -i -E ":a; s/$WORD/\1ochna-aero\2/; ta"
+find src -type f \( -name '*.desktop' -o -name '*.desktop.in' -o -name '*.desktop.in.in' \) -not -path '*/vendor/*' -print0 \
+    | xargs -0 -r sed -i -E "/^(Name|GenericName|Comment|Keywords)(\[[^]]*\])?=/ { :a; s/$WORD/\1ochna-aero\2/; ta }"
+echo "desktop/build.sh: COSMIC left in ftl or desktop names: $(grep -rIE --include='*.ftl' --include='*.desktop*' "$WORD" src 2>/dev/null | grep -vE 'DesktopNames|OnlyShowIn|NotShowIn|Categories' -c || true)"
+
 # OCHNA-D2: components this one build-depends on are built first in the same job and installed
 for dep in $(awk -v n="$NAME" '$1==n {for (i = 2; i <= NF; i++) print $i}' "$HERE/build-deps.txt"); do
     [ -d "$ROOT/out/desktop/$dep" ] || "$HERE/build.sh" "$dep"
